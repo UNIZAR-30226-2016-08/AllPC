@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         AlertDialog alertDialog;
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("LOGIN");
-        alertDialog.setMessage("Login correcto o incorrecto... quien sabe");
+        alertDialog.setMessage("Login correcto o incorrecto.... quien sabe");
         alertDialog.show();
     }
 }
