@@ -2,9 +2,12 @@ package es.unizar.eina.allpc;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -48,5 +51,27 @@ public class LoginActivity extends AppCompatActivity {
         alertDialog.setTitle("LOGIN");
         alertDialog.setMessage("Login correcto o incorrecto.... quien sabe");
         alertDialog.show();
+        loginCorrecto();
+    }
+
+    private void loginCorrecto() {
+        boolean loginAdmin = true;
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("LOGIN_ADMIN", loginAdmin);
+        Intent mIntent = new Intent();
+        mIntent.putExtras(bundle);
+        setResult(RESULT_OK, mIntent);
+        finish();
+    }
+
+    //Capturar pulsacion del boton atras
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent mIntent = new Intent();
+            setResult(RESULT_OK, mIntent);
+            finish();
+        }
+        return true;
     }
 }

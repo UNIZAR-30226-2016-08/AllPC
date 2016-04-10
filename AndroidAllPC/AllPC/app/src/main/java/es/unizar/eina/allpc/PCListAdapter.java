@@ -8,13 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class LenguajeListAdapter extends ArrayAdapter<String> {
+public class PCListAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
     private final String[] itemname;
     private final Integer[] integers;
 
-    public LenguajeListAdapter(Activity context, String[] itemname, Integer[] integers) {
+    public PCListAdapter(Activity context, String[] itemname, Integer[] integers) {
         super(context, R.layout.fila_lista, itemname);
         // TODO Auto-generated constructor stub
 
