@@ -8,9 +8,11 @@ import java.sql.SQLException;
  * Created by Adrian on 06/04/2016.
  */
 public class DBConnection {
+    //PHPmyADMIN ->http://www.phpmyadmin.co/
     private static final String URL = "sql7.freemysqlhosting.net";
-    private static final String USER = "sql7111177";
-    private static final String PASS = "CGEtcz8cQS";
+    private static final String DATABASE = "sql7114788";
+    private static final String USER = "sql7114788";
+    private static final String PASS = "VtugCHPbLC";
     private static final int PUERTO = 3306;
     Connection conexionMySQL = null;
 
@@ -19,7 +21,7 @@ public class DBConnection {
     }
     public void conectar(){
         if (conexionMySQL == null) {
-            String urlConexionMySQL = "jdbc:mysql://" + URL + ":" +	PUERTO + "/" + USER;
+            String urlConexionMySQL = "jdbc:mysql://" + URL + ":" +	PUERTO + "/" + DATABASE;
 
             try
             {
