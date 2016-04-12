@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.default_pc
     };
 
+    private DbAdapter mDbHelper;
     private ListView lista;
     //----------------------------------------------------------------------------------------
 
@@ -53,8 +54,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         System.out.println("prueba");
         loginAdmin = false;
-        DBConnection conexionBD = new DBConnection();
-        conexionBD.conectar();
+        //DBConnection conexionBD = new DBConnection();
+        //conexionBD.conectar();
+
+        mDbHelper = new DbAdapter(this);
+        mDbHelper.open();
+
+
 
         /* LISTA DE PC */
         //----------------------------------------------------------------------------------------

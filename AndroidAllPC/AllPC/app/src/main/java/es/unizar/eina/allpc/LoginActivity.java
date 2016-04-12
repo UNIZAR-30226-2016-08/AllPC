@@ -17,10 +17,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEmailView;
     private EditText mPasswordView;
 
+    private DbAdapter mDbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mDbHelper = new DbAdapter(this);
+        mDbHelper.open();
 
         mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -44,9 +49,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void comprobarDatos(String email, String password){
-        //Añadir comprobacion con la base de datos
+        //comprobacion con la base de datos
+        if(mDbHelper.login(email, password)){
+            loginCorrecto();
+        }
+        else{
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Error...");
+            alertDialog.setMessage("Login Incorrecto");
+            alertDialog.setButton("Aceptar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
 
-        loginCorrecto();
+                }
+            });
+            alertDialog.setIcon(R.drawable.default_pc);
+            alertDialog.show();
+        }
     }
 
     private void loginCorrecto() {
