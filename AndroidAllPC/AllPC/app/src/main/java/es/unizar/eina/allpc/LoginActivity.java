@@ -46,11 +46,6 @@ public class LoginActivity extends AppCompatActivity {
     private void comprobarDatos(String email, String password){
         //Añadir comprobacion con la base de datos
 
-        AlertDialog alertDialog;
-        alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("LOGIN");
-        alertDialog.setMessage("Login correcto o incorrecto.... quien sabe");
-        alertDialog.show();
         loginCorrecto();
     }
 
