@@ -29,7 +29,15 @@ public class DbAdapter {
     public static final String KEY_ADMIN_PASS = "password";
 
     public static final String KEY_PC_ROWID = "_id";
-    public static final String KEY_PC_NOMBRE = "nombre";
+    public static final String KEY_PC_MODELO = "modelo";
+    public static final String KEY_PC_MARCA = "marca";
+    public static final String KEY_PC_RAM = "ram";
+    public static final String KEY_PC_PROCESADOR = "procesador";
+    public static final String KEY_PC_SO = "so";
+    public static final String KEY_PC_HDD = "hdd";
+    public static final String KEY_PC_PANTALLA = "pantalla";
+    public static final String KEY_PC_GRAFICA = "grafica";
+    public static final String KEY_PC_CONEXIONES = "conexiones";
 
     private static final String TAG = "DbAdapter";
     private DatabaseHelper mDbHelper;
@@ -42,11 +50,16 @@ public class DbAdapter {
             "create table administradores (_id integer primary key autoincrement, "
                     + "correo text not null, nombre text not null, password text not null);";
 
+    private static final String DATABASE_PC_CREATE =
+            "create table pc (_id integer primary key autoincrement, "
+                    + "modelo text not null, marca text not null, ram integer not null, " +
+                    "procesador text not null, so text, hdd integer not null, " +
+                    "pantalla integer not null, grafica text, conexiones text not null);";
 
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE_ADMIN = "administradores";
     private static final String DATABASE_TABLE_PC = "pc";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private final Context mCtx;
 
@@ -60,10 +73,16 @@ public class DbAdapter {
         public void onCreate(SQLiteDatabase db) {
 
             db.execSQL(DATABASE_ADMIN_CREATE);
-            //db.execSQL(DATABASE_NOTES_CREATE);
+            db.execSQL(DATABASE_PC_CREATE);
 
             //Usuario por defecto
             db.execSQL("insert into administradores values (null, 'admin@admin.com', 'admin', 'admin');");
+
+            //PC por defecto
+            db.execSQL("insert into pc values (null, 'K55V', 'Asus', 8, 'i7 3610QM', 'W7', 500, 15," +
+                    "'GT630M', 'Muchas');");
+            db.execSQL("insert into pc values (null, 'P2', 'HP', 4, 'i3 2222Y', 'W10', 1000, 15," +
+                    "'GT670M', 'Muchas');");
         }
 
         @Override
@@ -71,7 +90,7 @@ public class DbAdapter {
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                     + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS administradores");
-            //db.execSQL("DROP TABLE IF EXISTS categories");
+            db.execSQL("DROP TABLE IF EXISTS pc");
             onCreate(db);
         }
     }
@@ -106,6 +125,8 @@ public class DbAdapter {
     }
 
 
+    /* ADMINISTRADORES */
+
     public long createAdmin(String correo, String nombre, String password){
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_ADMIN_CORREO, correo);
@@ -126,11 +147,19 @@ public class DbAdapter {
                         null, null, null, null);
 
         if(c.moveToFirst()){
-            System.out.println("USER: " + c.getString(0) + " PASS: " + c.getString(1));
             return (correo.equals(c.getString(0)) && password.equals(c.getString(1)));
         }
         else {
             return false;
         }
     }
+
+    /* PC */
+    public Cursor fetchAllPC() {
+        return mDb.query(DATABASE_TABLE_PC, new String[]{KEY_PC_ROWID, KEY_PC_MODELO,
+                KEY_PC_MARCA, KEY_PC_RAM, KEY_PC_PROCESADOR, KEY_PC_SO, KEY_PC_HDD,
+                KEY_PC_PANTALLA, KEY_PC_GRAFICA, KEY_PC_CONEXIONES}, null, null, null,
+                null, null);
+    }
+
 }

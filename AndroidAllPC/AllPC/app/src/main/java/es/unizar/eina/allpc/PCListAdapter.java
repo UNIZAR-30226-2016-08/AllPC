@@ -34,7 +34,7 @@ public class PCListAdapter extends ArrayAdapter<String> {
 
         txtTitle.setText(itemname[posicion]);
         imageView.setImageResource(integers[posicion]);
-        etxDescripcion.setText("Precio "+itemname[posicion]);
+        etxDescripcion.setText("Marca "+itemname[posicion]);
 
         return rowView;
     }
