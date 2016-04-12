@@ -59,7 +59,7 @@ public class DbAdapter {
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE_ADMIN = "administradores";
     private static final String DATABASE_TABLE_PC = "pc";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private final Context mCtx;
 
@@ -79,7 +79,7 @@ public class DbAdapter {
             db.execSQL("insert into administradores values (null, 'admin@admin.com', 'admin', 'admin');");
 
             //PC por defecto
-            db.execSQL("insert into pc values (null, 'K55V', 'Asus', 8, 'i7 3610QM', 'W7', 500, 15," +
+            db.execSQL("insert into pc values (null, 'K55Vm', 'Asus', 8, 'i7 3610QM', '8', 500, 15," +
                     "'GT630M', 'Muchas');");
             db.execSQL("insert into pc values (null, 'P2', 'HP', 4, 'i3 2222Y', 'W10', 1000, 15," +
                     "'GT670M', 'Muchas');");
@@ -155,11 +155,64 @@ public class DbAdapter {
     }
 
     /* PC */
+    public long createPC(String modelo, String marca, int ram, String procesador, String so,
+                         int hdd, int pantalla, String grafica, String conexiones){
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_PC_MODELO, modelo);
+        initialValues.put(KEY_PC_MARCA, marca);
+        initialValues.put(KEY_PC_RAM, ram);
+        initialValues.put(KEY_PC_PROCESADOR, procesador);
+        initialValues.put(KEY_PC_SO, so);
+        initialValues.put(KEY_PC_HDD, hdd);
+        initialValues.put(KEY_PC_PANTALLA, pantalla);
+        initialValues.put(KEY_PC_GRAFICA, grafica);
+        initialValues.put(KEY_PC_CONEXIONES, conexiones);
+
+
+        return  mDb.insert(DATABASE_TABLE_PC, null, initialValues);
+    }
+
+    public boolean deletePC(long rowId) {
+        return mDb.delete(DATABASE_TABLE_PC, KEY_PC_ROWID + "=" + rowId, null) > 0;
+    }
+
+    public boolean updatePC(long rowId, String modelo, String marca, int ram, String procesador,
+                            String so, int hdd, int pantalla, String grafica, String conexiones){
+        ContentValues args = new ContentValues();
+        args.put(KEY_PC_ROWID, rowId);
+        args.put(KEY_PC_MODELO, modelo);
+        args.put(KEY_PC_MARCA, marca);
+        args.put(KEY_PC_RAM, ram);
+        args.put(KEY_PC_PROCESADOR, procesador);
+        args.put(KEY_PC_SO, so);
+        args.put(KEY_PC_HDD, hdd);
+        args.put(KEY_PC_PANTALLA, pantalla);
+        args.put(KEY_PC_GRAFICA, grafica);
+        args.put(KEY_PC_CONEXIONES, conexiones);
+
+        return mDb.update(DATABASE_TABLE_PC, args, KEY_PC_ROWID + "=" + rowId, null) > 0;
+    }
+
     public Cursor fetchAllPC() {
         return mDb.query(DATABASE_TABLE_PC, new String[]{KEY_PC_ROWID, KEY_PC_MODELO,
                 KEY_PC_MARCA, KEY_PC_RAM, KEY_PC_PROCESADOR, KEY_PC_SO, KEY_PC_HDD,
                 KEY_PC_PANTALLA, KEY_PC_GRAFICA, KEY_PC_CONEXIONES}, null, null, null,
                 null, null);
+    }
+
+    public Cursor fetchPC(long rowId) throws SQLException {
+
+        Cursor mCursor =
+
+                mDb.query(true, DATABASE_TABLE_PC, new String[] {KEY_PC_ROWID, KEY_PC_MODELO,
+                KEY_PC_MARCA, KEY_PC_RAM, KEY_PC_PROCESADOR, KEY_PC_SO, KEY_PC_HDD,
+                                KEY_PC_PANTALLA, KEY_PC_GRAFICA, KEY_PC_CONEXIONES},
+                        KEY_PC_ROWID + "=" + rowId, null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+
     }
 
 }

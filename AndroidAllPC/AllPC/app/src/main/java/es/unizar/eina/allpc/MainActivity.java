@@ -6,10 +6,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private static final int ACTIVITY_LOGIN=0;
+    private static final int ACTIVITY_CREATE=1;
+    private static final int ACTIVITY_EDIT=2;
 
     private static final int MENU_LOGIN = Menu.FIRST;
     private static final int MENU_COMPARADOR = Menu.FIRST + 1;
@@ -97,7 +101,14 @@ public class MainActivity extends AppCompatActivity {
         String[] from = new String[] { DbAdapter.KEY_PC_MODELO,
             DbAdapter.KEY_PC_MARCA};
         int[] to = new int[] { R.id.texto_principal, R.id.texto_secundario};
-        System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
+        /* PRUEBA IMAGEN -----------------------------------------------------------------------*/
+        /*LayoutInflater inflater=this.getLayoutInflater();
+        View rowView=inflater.inflate(R.layout.fila_lista,null,true);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
+        imageView.setImageResource(R.drawable.default_pc);*/
+        //-------------------------------------------------------------------------------------
+        System.out.println("Dzzzzzzzzzzzzzzzzzzzsssssszzzzz");
         /*
         PCListAdapter adapter=new PCListAdapter(this, from, to);
         lista=(ListView)findViewById(R.id.mi_lista);
@@ -177,14 +188,15 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                /*CODIGO PARA BORRAR*/
-                System.out.println("BORRAR PC " + info.position);
+                mDbHelper.deletePC(info.id);
+                fillData();
                 return true;
 
             case EDIT_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 /*CODIGO PARA EDITAR*/
                 System.out.println("EDITAR PC " + info.position);
+                editNote(info.position, info.id);
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -192,6 +204,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void crearPC(){
+        Intent i = new Intent(this, PCedit.class);
+        startActivityForResult(i, ACTIVITY_CREATE);
+    }
+
+    protected void editNote(int position, long id) {
+        Intent i = new Intent(this, PCedit.class);
+        i.putExtra(DbAdapter.KEY_PC_ROWID, id);
+        startActivityForResult(i, ACTIVITY_EDIT);
     }
 
     private void cerrarSesion(){
