@@ -1,6 +1,7 @@
 package es.unizar.eina.allpc;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean loginAdmin;
     /* LISTA DE PC */
     //----------------------------------------------------------------------------------------
-    private String listaPC[]=new String[]{"PC1","PC2","PC3","PC4","PC5","PC6",
+ /*   private String listaPC[]=new String[]{"PC1","PC2","PC3","PC4","PC5","PC6",
             "PC7","PC8","PC9"};
 
     private Integer[] imgid={
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.default_pc,
             R.drawable.default_pc
     };
-
+*/
     private DbAdapter mDbHelper;
     private ListView lista;
     //----------------------------------------------------------------------------------------
@@ -61,12 +63,14 @@ public class MainActivity extends AppCompatActivity {
         mDbHelper.open();
 
 
+        lista = (ListView)findViewById(R.id.mi_lista);
+        fillData();
 
         /* LISTA DE PC */
         //----------------------------------------------------------------------------------------
-        PCListAdapter adapter=new PCListAdapter(this, listaPC,imgid);
+      /*  PCListAdapter adapter=new PCListAdapter(this, listaPC,imgid);
         lista=(ListView)findViewById(R.id.mi_lista);
-        lista.setAdapter(adapter);
+        lista.setAdapter(adapter);*/
 
         /* ACCION AL PULSAR UN ELEMENTO
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,6 +87,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void fillData(){
+        Cursor mPcCursor;
+
+        mPcCursor = mDbHelper.fetchAllPC();
+        startManagingCursor(mPcCursor);
+
+        String[] from = new String[] { DbAdapter.KEY_PC_MODELO,
+            DbAdapter.KEY_PC_MARCA};
+        int[] to = new int[] { R.id.texto_principal, R.id.texto_secundario};
+        System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        /*
+        PCListAdapter adapter=new PCListAdapter(this, from, to);
+        lista=(ListView)findViewById(R.id.mi_lista);
+        lista.setAdapter(adapter);*/
+
+        SimpleCursorAdapter pc =
+                new SimpleCursorAdapter(this, R.layout.fila_lista, mPcCursor, from, to);
+
+        lista.setAdapter(pc);
+    }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
