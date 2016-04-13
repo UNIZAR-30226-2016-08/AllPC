@@ -188,4 +188,52 @@ public class ConexionBD {
 
         return admins;
     }
+
+    public static boolean insertPC(String url, String modelo, String marca,String ram,
+                                   String procesador, String so, String almacenamiento,
+                                   String pantalla, String grafica, String conexiones) {
+
+        class GetPCsJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                HttpURLConnection con = null;
+                String result = "error";
+                try {
+                    URL url = new URL(params[0]);
+                    con = (HttpURLConnection) url.openConnection();
+
+                    // Obtener el estado del recurso
+                    int statusCode = con.getResponseCode();
+
+                    if(statusCode==200) {
+                        result = "ok";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }finally {
+                    if (con != null) con.disconnect();
+                }
+                return result;
+            }
+        }
+        GetPCsJSON g = new GetPCsJSON();
+        url = url + "?modelo="+modelo+"&marca="+marca+"&ram="+ram+"&procesador="+procesador+"&so="+so+"&almacenamiento="+almacenamiento+"&pantalla="+pantalla+"&grafica="+grafica+"&conexiones="+conexiones;
+        g.execute(url);
+        boolean result = false;
+        try {
+            if (g.get().compareTo("ok")==0){
+                result = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }
