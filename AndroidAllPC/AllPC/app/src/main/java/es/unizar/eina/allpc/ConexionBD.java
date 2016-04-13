@@ -1,21 +1,14 @@
 package es.unizar.eina.allpc;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
@@ -48,7 +41,8 @@ public class ConexionBD {
                     if(statusCode==200) {
 
                         InputStream in = new BufferedInputStream(con.getInputStream());
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"), 8);
+                        BufferedReader reader = new BufferedReader
+                                (new InputStreamReader(in, "UTF-8"), 8);
                         StringBuilder sb = new StringBuilder();
 
                         String line = null;
@@ -74,7 +68,7 @@ public class ConexionBD {
                 JSONArray pcsCod = null;
                 String[][] pcs = null;
                 try {
-                    pcsCod = (JSONArray) new JSONTokener(jsonCodificado).nextValue();
+                    pcsCod = new JSONArray(jsonCodificado);
                     //Obtenemos un array de JSON
                     pcs = new String [pcsCod.length()][10];
                     for (int i = 0; i < pcsCod.length(); i++) {
@@ -102,7 +96,7 @@ public class ConexionBD {
         GetPCsJSON g = new GetPCsJSON();
         g.execute(url);
         String[][] pcs = new String[1][1];
-        pcs[0][0] = "iee";
+        pcs[0][0] = "ERROR!!!!";
         try {
             pcs = g.get();
         } catch (InterruptedException e) {
@@ -110,11 +104,88 @@ public class ConexionBD {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        for (int i = 0; i < pcs.length; i++){
-            for (int j = 0; j < pcs[i].length; j++){
-                System.out.println(pcs[i][j]);
+
+        return pcs;
+    }
+
+    public static String[][] getAdmins(String url) {
+
+        class GetPCsJSON extends AsyncTask<String, Void, String[][]> {
+
+            @Override
+            protected String[][] doInBackground(String... params) {
+
+                HttpURLConnection con = null;
+                String[][] pcs = null;
+
+                try {
+                    URL url = new URL(params[0]);
+                    con = (HttpURLConnection) url.openConnection();
+
+                    // Obtener el estado del recurso
+                    int statusCode = con.getResponseCode();
+
+                    if(statusCode==200) {
+
+                        InputStream in = new BufferedInputStream(con.getInputStream());
+                        BufferedReader reader = new BufferedReader
+                                (new InputStreamReader(in, "UTF-8"), 8);
+                        StringBuilder sb = new StringBuilder();
+
+                        String line = null;
+                        while ((line = reader.readLine()) != null)
+                        {
+                            sb.append(line + "\n");
+                        }
+                        String adminsCod = sb.toString();
+                        pcs = obtenAdmins(adminsCod);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }finally {
+                    if (con != null) con.disconnect();
+                }
+                return pcs;
+            }
+
+            protected String[][] obtenAdmins(String jsonCodificado){
+                //Obtenemos el Objeto a partir del String
+                JSONArray adminsCod = null;
+                String[][] admins = null;
+                try {
+                    adminsCod = new JSONArray(jsonCodificado);
+                    //Obtenemos un array de JSON
+                    admins = new String [adminsCod.length()][4];
+                    for (int i = 0; i < adminsCod.length(); i++) {
+                        //Como cada elemento del array está en JSON,
+                        //obtenemos el objeto JSON correspondiente
+                        JSONObject d = adminsCod.getJSONObject(i);
+                        //Obtenemos los datos del susodicho
+                        admins[i][0] = d.getString("_id");
+                        admins[i][1] = d.getString("correo");
+                        admins[i][2] = d.getString("nombre");
+                        admins[i][3] = d.getString("password");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return admins;
             }
         }
-        return pcs;
+        GetPCsJSON g = new GetPCsJSON();
+        g.execute(url);
+        String[][] admins = new String[1][1];
+        admins[0][0] = "ERROR!!!!";
+        try {
+            admins = g.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return admins;
     }
 }
