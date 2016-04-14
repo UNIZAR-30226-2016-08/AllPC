@@ -110,7 +110,7 @@ public class ConexionBD {
 
     public static String[][] getAdmins(String url) {
 
-        class GetPCsJSON extends AsyncTask<String, Void, String[][]> {
+        class GetAdminsJSON extends AsyncTask<String, Void, String[][]> {
 
             @Override
             protected String[][] doInBackground(String... params) {
@@ -174,7 +174,7 @@ public class ConexionBD {
                 return admins;
             }
         }
-        GetPCsJSON g = new GetPCsJSON();
+        GetAdminsJSON g = new GetAdminsJSON();
         g.execute(url);
         String[][] admins = new String[1][1];
         admins[0][0] = "ERROR!!!!";
@@ -193,7 +193,7 @@ public class ConexionBD {
                                    String procesador, String so, String almacenamiento,
                                    String pantalla, String grafica, String conexiones) {
 
-        class GetPCsJSON extends AsyncTask<String, Void, String> {
+        class InsertPCsJSON extends AsyncTask<String, Void, String> {
 
             @Override
             protected String doInBackground(String... params) {
@@ -220,8 +220,54 @@ public class ConexionBD {
                 return result;
             }
         }
-        GetPCsJSON g = new GetPCsJSON();
+        InsertPCsJSON g = new InsertPCsJSON();
         url = url + "?modelo="+modelo+"&marca="+marca+"&ram="+ram+"&procesador="+procesador+"&so="+so+"&almacenamiento="+almacenamiento+"&pantalla="+pantalla+"&grafica="+grafica+"&conexiones="+conexiones;
+        g.execute(url);
+        boolean result = false;
+        try {
+            if (g.get().compareTo("ok")==0){
+                result = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static boolean insertAdmin(String url, String nombre, String correo,String pass) {
+
+        class InsertAdminsJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                HttpURLConnection con = null;
+                String result = "error";
+                try {
+                    URL url = new URL(params[0]);
+                    con = (HttpURLConnection) url.openConnection();
+
+                    // Obtener el estado del recurso
+                    int statusCode = con.getResponseCode();
+
+                    if(statusCode==200) {
+                        result = "ok";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }finally {
+                    if (con != null) con.disconnect();
+                }
+                return result;
+            }
+        }
+        InsertAdminsJSON g = new InsertAdminsJSON();
+        url = url + "?nombre="+nombre+"&correo="+correo+"&pass="+pass;
         g.execute(url);
         boolean result = false;
         try {
