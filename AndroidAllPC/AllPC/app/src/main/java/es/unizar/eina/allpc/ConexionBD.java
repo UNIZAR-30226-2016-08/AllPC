@@ -21,7 +21,13 @@ import org.json.JSONTokener;
  */
 public class ConexionBD {
 
-    public static String[][] getPCs(String url) {
+    private static final String URLGETPCS = "http://allpcserver.ddns.net/AllPC/PCs.php?tabla=PCs";
+    private static final String URLGETADMINS = "http://allpcserver.ddns.net/AllPC/PCs.php?tabla=Administradores";
+    private static final String URLINSERTPC = "http://allpcserver.ddns.net/AllPC/insertPC.php";
+    private static final String URLINSERTADMIN = "http://allpcserver.ddns.net/AllPC/insertAdmin.php";
+    private static final String URLUPDATEPC = "http://allpcserver.ddns.net/AllPC/updatePC.php";
+
+    public static String[][] getPCs() {
 
         class GetPCsJSON extends AsyncTask<String, Void, String[][]> {
 
@@ -94,7 +100,7 @@ public class ConexionBD {
             }
         }
         GetPCsJSON g = new GetPCsJSON();
-        g.execute(url);
+        g.execute(URLGETPCS);
         String[][] pcs = new String[1][1];
         pcs[0][0] = "ERROR!!!!";
         try {
@@ -108,7 +114,7 @@ public class ConexionBD {
         return pcs;
     }
 
-    public static String[][] getAdmins(String url) {
+    public static String[][] getAdmins() {
 
         class GetAdminsJSON extends AsyncTask<String, Void, String[][]> {
 
@@ -175,7 +181,7 @@ public class ConexionBD {
             }
         }
         GetAdminsJSON g = new GetAdminsJSON();
-        g.execute(url);
+        g.execute(URLGETADMINS);
         String[][] admins = new String[1][1];
         admins[0][0] = "ERROR!!!!";
         try {
@@ -189,7 +195,7 @@ public class ConexionBD {
         return admins;
     }
 
-    public static boolean insertPC(String url, String modelo, String marca,String ram,
+    public static boolean insertPC(String modelo, String marca,String ram,
                                    String procesador, String so, String almacenamiento,
                                    String pantalla, String grafica, String conexiones) {
 
@@ -221,7 +227,7 @@ public class ConexionBD {
             }
         }
         InsertPCsJSON g = new InsertPCsJSON();
-        url = url + "?modelo="+modelo+"&marca="+marca+"&ram="+ram+"&procesador="+procesador+"&so="+so+"&almacenamiento="+almacenamiento+"&pantalla="+pantalla+"&grafica="+grafica+"&conexiones="+conexiones;
+        String url = URLINSERTPC + "?modelo="+modelo+"&marca="+marca+"&ram="+ram+"&procesador="+procesador+"&so="+so+"&almacenamiento="+almacenamiento+"&pantalla="+pantalla+"&grafica="+grafica+"&conexiones="+conexiones;
         g.execute(url);
         boolean result = false;
         try {
@@ -237,7 +243,7 @@ public class ConexionBD {
         return result;
     }
 
-    public static boolean insertAdmin(String url, String nombre, String correo,String pass) {
+    public static boolean insertAdmin(String nombre, String correo,String pass) {
 
         class InsertAdminsJSON extends AsyncTask<String, Void, String> {
 
@@ -267,7 +273,55 @@ public class ConexionBD {
             }
         }
         InsertAdminsJSON g = new InsertAdminsJSON();
-        url = url + "?nombre="+nombre+"&correo="+correo+"&pass="+pass;
+        String url = URLINSERTADMIN + "?nombre="+nombre+"&correo="+correo+"&pass="+pass;
+        g.execute(url);
+        boolean result = false;
+        try {
+            if (g.get().compareTo("ok")==0){
+                result = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static boolean updatePC(String _id, String modelo, String marca,String ram,
+                                   String procesador, String so, String almacenamiento,
+                                   String pantalla, String grafica, String conexiones) {
+
+        class UpdatePCsJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                HttpURLConnection con = null;
+                String result = "error";
+                try {
+                    URL url = new URL(params[0]);
+                    con = (HttpURLConnection) url.openConnection();
+
+                    // Obtener el estado del recurso
+                    int statusCode = con.getResponseCode();
+
+                    if(statusCode==200) {
+                        result = "ok";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }finally {
+                    if (con != null) con.disconnect();
+                }
+                return result;
+            }
+        }
+        UpdatePCsJSON g = new UpdatePCsJSON();
+        String url = URLUPDATEPC+"?_id="+_id+"&modelo="+modelo+"&marca="+marca+"&ram="+ram+"&procesador="+procesador+"&so="+so+"&almacenamiento="+almacenamiento+"&pantalla="+pantalla+"&grafica="+grafica+"&conexiones="+conexiones;
         g.execute(url);
         boolean result = false;
         try {

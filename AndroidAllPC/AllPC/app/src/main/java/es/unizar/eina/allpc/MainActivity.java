@@ -62,6 +62,29 @@ public class MainActivity extends AppCompatActivity {
         loginAdmin = false;
         //DBConnection conexionBD = new DBConnection();
         //conexionBD.conectar();
+        System.out.println("-----Prueba BBDD-----");
+        System.out.println("-----Prueba PCs-----");
+        String[][] prueba=ConexionBD.getPCs();
+        for (int i = 0; i<prueba.length; i++){
+            for (int j = 0; j<prueba[i].length; j++){
+                System.out.print(prueba[i][j]+"\t");
+            }
+            System.out.println();
+        }
+        System.out.println("-----Prueba Admins-----");
+        prueba=ConexionBD.getPCs();
+        for (int i = 0; i<prueba.length; i++){
+            for (int j = 0; j<prueba[i].length; j++){
+                System.out.print(prueba[i][j]+"\t");
+            }
+            System.out.println();
+        }
+        System.out.println("-----Prueba insert PC-----");
+        ConexionBD.insertPC("prueba","prueba","2","prueba","prueba","3","24.3","prueba","prueba");
+        System.out.println("-----Prueba insert Admin-----");
+        ConexionBD.insertAdmin("prueba","prueba","prueba");
+        System.out.println("-----Prueba update PC-----");
+        ConexionBD.updatePC("2","prueba","prueba","2","prueba","prueba","3","24.3","prueba","prueba");
 
         mDbHelper = new DbAdapter(this);
         mDbHelper.open();
