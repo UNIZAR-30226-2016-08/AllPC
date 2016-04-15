@@ -26,6 +26,7 @@ public class ConexionBD {
     private static final String URLINSERTPC = "http://allpcserver.ddns.net/AllPC/insertPC.php";
     private static final String URLINSERTADMIN = "http://allpcserver.ddns.net/AllPC/insertAdmin.php";
     private static final String URLUPDATEPC = "http://allpcserver.ddns.net/AllPC/updatePC.php";
+    private static final String URLDELETE = "http://allpcserver.ddns.net/AllPC/deletePC.php";
 
     public static String[][] getPCs() {
 
@@ -322,6 +323,52 @@ public class ConexionBD {
         }
         UpdatePCsJSON g = new UpdatePCsJSON();
         String url = URLUPDATEPC+"?_id="+_id+"&modelo="+modelo+"&marca="+marca+"&ram="+ram+"&procesador="+procesador+"&so="+so+"&almacenamiento="+almacenamiento+"&pantalla="+pantalla+"&grafica="+grafica+"&conexiones="+conexiones;
+        g.execute(url);
+        boolean result = false;
+        try {
+            if (g.get().compareTo("ok")==0){
+                result = true;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static boolean delete(String id, String tabla) {
+
+        class DeleteJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                HttpURLConnection con = null;
+                String result = "error";
+                try {
+                    URL url = new URL(params[0]);
+                    con = (HttpURLConnection) url.openConnection();
+
+                    // Obtener el estado del recurso
+                    int statusCode = con.getResponseCode();
+
+                    if(statusCode==200) {
+                        result = "ok";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }finally {
+                    if (con != null) con.disconnect();
+                }
+                return result;
+            }
+        }
+        DeleteJSON g = new DeleteJSON();
+        String url = URLDELETE + "?id="+id+"&tabla="+tabla;
         g.execute(url);
         boolean result = false;
         try {
