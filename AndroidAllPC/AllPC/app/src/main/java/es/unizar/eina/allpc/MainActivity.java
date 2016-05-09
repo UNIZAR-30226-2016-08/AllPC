@@ -2,6 +2,7 @@ package es.unizar.eina.allpc;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -132,7 +133,39 @@ public class MainActivity extends AppCompatActivity {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
         imageView.setImageResource(R.drawable.default_pc);*/
         //-------------------------------------------------------------------------------------
-        System.out.println("Dzzzzzzzzzzzzzzzzzzzsssssszzzzz");
+        System.out.println("---------------PRUEBAS BD EXTERNA------------------");
+
+
+        ConexionBD bd = new ConexionBD();
+        String[][] pcs = null;
+        pcs = bd.getPCs();
+        System.out.println("GET PCs");
+        try {
+            if(pcs==null){
+                System.out.println("pcs = null");
+            }
+            if(pcs.length==0){
+                System.out.println("pcs = vacio");
+            }
+
+            for(int i=0; i<pcs.length; i++){
+                for(int j=0; j<10; j++) {
+                    System.out.print(pcs[i][j] + " ");
+                }
+                System.out.println("---------");
+            }
+
+        }
+        catch (Exception e) {
+            System.out.println("ALGO FALLO :(");
+        }
+/*
+        String[] from = new String[] { pcs[1][1],
+                pcs[1][2]};
+        int[] to = new int[] { R.id.texto_principal, R.id.texto_secundario};
+*/
+
+        System.out.println("---------------FIN PRUEBAS------------------");
         /*
         PCListAdapter adapter=new PCListAdapter(this, from, to);
         lista=(ListView)findViewById(R.id.mi_lista);

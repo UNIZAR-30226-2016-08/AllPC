@@ -21,12 +21,12 @@ import org.json.JSONTokener;
  */
 public class ConexionBD {
 
-    private static final String URLGETPCS = "http://allpc.ddns.net/AllPC/PCs.php?tabla=PCs";
-    private static final String URLGETADMINS = "http://allpc.ddns.net/AllPC/PCs.php?tabla=Administradores";
-    private static final String URLINSERTPC = "http://allpc.ddns.net/AllPC/insertPC.php";
-    private static final String URLINSERTADMIN = "http://allpc.ddns.net/AllPC/insertAdmin.php";
-    private static final String URLUPDATEPC = "http://allpc.ddns.net/AllPC/updatePC.php";
-    private static final String URLDELETE = "http://allpc.ddns.net/AllPC/deletePC.php";
+    private static final String URLGETPCS = "http://allpc.ddns.net/allpc/PCs.php?tabla=PCs";
+    private static final String URLGETADMINS = "http://allpc.ddns.net/allpc/PCs.php?tabla=Administradores";
+    private static final String URLINSERTPC = "http://allpc.ddns.net/allpc/insertPC.php";
+    private static final String URLINSERTADMIN = "http://allpc.ddns.net/allpc/insertAdmin.php";
+    private static final String URLUPDATEPC = "http://allpc.ddns.net/allpc/updatePC.php";
+    private static final String URLDELETE = "http://allpc.ddns.net/allpc/deletePC.php";
 
     public static String[][] getPCs() {
 
@@ -67,6 +67,12 @@ public class ConexionBD {
                 }finally {
                     if (con != null) con.disconnect();
                 }
+                if (pcs==null){
+                    System.out.println("devuelve NULL getPC");
+                }
+                else {
+                    System.out.println("devuelve algo getPC");
+                }
                 return pcs;
             }
 
@@ -84,18 +90,24 @@ public class ConexionBD {
                         JSONObject d = pcsCod.getJSONObject(i);
                         //Obtenemos los datos del susodicho
                         pcs[i][0] = d.getString("_id");
-                        pcs[i][1] = d.getString("Modelo");
-                        pcs[i][2] = d.getString("Marca");
-                        pcs[i][3] = d.getString("RAM");
-                        pcs[i][4] = d.getString("Procesador");
-                        pcs[i][5] = d.getString("SO");
-                        pcs[i][6] = d.getString("Almacenamiento");
-                        pcs[i][7] = d.getString("Pantalla");
-                        pcs[i][8] = d.getString("Grafica");
-                        pcs[i][9] = d.getString("Conexiones");
+                        pcs[i][1] = d.getString("modelo");
+                        pcs[i][2] = d.getString("marca");
+                        pcs[i][3] = d.getString("ram");
+                        pcs[i][4] = d.getString("procesador");
+                        pcs[i][5] = d.getString("so");
+                        pcs[i][6] = d.getString("almacenamiento");
+                        pcs[i][7] = d.getString("pantalla");
+                        pcs[i][8] = d.getString("grafica");
+                        pcs[i][9] = d.getString("conexiones");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+                if (pcs==null){
+                    System.out.println("devuelve NULL obtPC");
+                }
+                else {
+                    System.out.println("devuelve algo obtPC");
                 }
                 return pcs;
             }
