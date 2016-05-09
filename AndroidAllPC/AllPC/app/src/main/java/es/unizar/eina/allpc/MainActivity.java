@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         System.out.println("prueba");
         loginAdmin = false;
+        /**
         //DBConnection conexionBD = new DBConnection();
         //conexionBD.conectar();
         System.out.println("-----Prueba BBDD-----");
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         ConexionBD.insertAdmin("prueba","prueba","prueba");
         System.out.println("-----Prueba update PC-----");
         ConexionBD.updatePC("2","prueba","prueba","2","prueba","prueba","3","24.3","prueba","prueba");
-
+*/
         mDbHelper = new DbAdapter(this);
         mDbHelper.open();
 

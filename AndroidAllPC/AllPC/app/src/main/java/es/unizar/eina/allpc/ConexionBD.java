@@ -21,12 +21,12 @@ import org.json.JSONTokener;
  */
 public class ConexionBD {
 
-    private static final String URLGETPCS = "http://allpcserver.ddns.net/AllPC/PCs.php?tabla=PCs";
-    private static final String URLGETADMINS = "http://allpcserver.ddns.net/AllPC/PCs.php?tabla=Administradores";
-    private static final String URLINSERTPC = "http://allpcserver.ddns.net/AllPC/insertPC.php";
-    private static final String URLINSERTADMIN = "http://allpcserver.ddns.net/AllPC/insertAdmin.php";
-    private static final String URLUPDATEPC = "http://allpcserver.ddns.net/AllPC/updatePC.php";
-    private static final String URLDELETE = "http://allpcserver.ddns.net/AllPC/deletePC.php";
+    private static final String URLGETPCS = "http://allpc.ddns.net/AllPC/PCs.php?tabla=PCs";
+    private static final String URLGETADMINS = "http://allpc.ddns.net/AllPC/PCs.php?tabla=Administradores";
+    private static final String URLINSERTPC = "http://allpc.ddns.net/AllPC/insertPC.php";
+    private static final String URLINSERTADMIN = "http://allpc.ddns.net/AllPC/insertAdmin.php";
+    private static final String URLUPDATEPC = "http://allpc.ddns.net/AllPC/updatePC.php";
+    private static final String URLDELETE = "http://allpc.ddns.net/AllPC/deletePC.php";
 
     public static String[][] getPCs() {
 

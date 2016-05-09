@@ -8,7 +8,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@drawable/logo_fondo"
+    android:backgroundTint="#d5ddf8"
+    android:backgroundTintMode="multiply">
 
     <!-- Login progress -->
     <ProgressBar
@@ -41,7 +44,8 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/abc_input_method_navigation_guard" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -59,7 +63,8 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/abc_primary_text_disable_only_material_light" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -70,7 +75,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:background="#000000"
+                android:textColor="@color/ColorTittle" />
 
         </LinearLayout>
     </ScrollView>
