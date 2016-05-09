@@ -37,6 +37,9 @@ public class PCedit extends AppCompatActivity {
         mDbHelper = new DbAdapter(this);
         mDbHelper.open();
 
+
+
+
         setContentView(R.layout.activity_pcedit);
         setTitle(R.string.app_name);
 
@@ -94,9 +97,11 @@ public class PCedit extends AppCompatActivity {
 
     private void populateFields() {
         if (mRowId != null) {
-            Cursor pc = mDbHelper.fetchPC(mRowId);
+            //Cursor pc = mDbHelper.fetchPC(mRowId);
+            ConexionBD bd = new ConexionBD();
+            Cursor pc = bd.getPC(mRowId);
             startManagingCursor(pc);
-            mIdText.setText(pc.getString(
+            /*mIdText.setText(pc.getString(
                     pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_ROWID)));
             mModeloText.setText(pc.getString(
                     pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_MODELO)));
@@ -113,23 +118,47 @@ public class PCedit extends AppCompatActivity {
             mGraficaText.setText(pc.getString(
                     pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_GRAFICA)));
             mConexionesText.setText(pc.getString(
-                    pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_CONEXIONES)));
-
+                    pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_CONEXIONES)));*/
+            System.out.println("------------------------------");
+            pc.moveToFirst();
+            /*String[] a = pc.getColumnNames();
+            System.out.println(a[0] + " " + a[1]);
+            System.out.println(pc.getColumnIndex(a[0]));
+            System.out.println(pc.getString(pc.getColumnIndex(a[2])));
+            System.out.println("------------------------------");*/
+            mIdText.setText(pc.getString(
+                    pc.getColumnIndexOrThrow("_id")));
+            mModeloText.setText(pc.getString(
+                    pc.getColumnIndexOrThrow("modelo")));
+            mMarcaText.setText(pc.getString(
+                    pc.getColumnIndexOrThrow("marca")));
+            mRamText.setSelection(spinnerPositionRAM(
+                    pc.getString(pc.getColumnIndex("ram"))));
+            mProcesadorText.setText(pc.getString(
+                    pc.getColumnIndexOrThrow("procesador")));
+            mSOText.setText(pc.getString(
+                    pc.getColumnIndexOrThrow("so")));
+            mHDDText.setSelection(1);
+            mPantallaText.setSelection(1);
+            mGraficaText.setText(pc.getString(
+                    pc.getColumnIndexOrThrow("grafica")));
+            mConexionesText.setText(pc.getString(
+                    pc.getColumnIndexOrThrow("conexiones")));
         }
     }
 
     private int spinnerPositionRAM (String valor){
         switch (valor){
             case "1":
-                return 1;
+                return 0;
             case "2":
-                return 2;
+                return 1;
             case "4":
-                return 3;
+                return 2;
             case "8":
-                return 4;
+                return 3;
             case "16":
-                return 5;
+                return 4;
         }
         return 1;
     }
@@ -186,7 +215,11 @@ public class PCedit extends AppCompatActivity {
             }
         }
         else {
-            mDbHelper.updatePC(mRowId, modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
+            //mDbHelper.updatePC(mRowId, modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
+            ConexionBD bd = new ConexionBD();
+            System.out.println("ACTUALIZAR PC");
+            bd.updatePC(mRowId, modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
+            System.out.println("ACTUALIZAR PC 2");
         }
     }
 }

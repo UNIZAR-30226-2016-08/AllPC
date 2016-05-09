@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.default_pc
     };
 */
-    private DbAdapter mDbHelper;
+    //private DbAdapter mDbHelper;
     private ListView lista;
     //----------------------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         System.out.println("prueba");
-        loginAdmin = false;
+        loginAdmin = true;
         /**
         //DBConnection conexionBD = new DBConnection();
         //conexionBD.conectar();
@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("-----Prueba update PC-----");
         ConexionBD.updatePC("2","prueba","prueba","2","prueba","prueba","3","24.3","prueba","prueba");
 */
-        mDbHelper = new DbAdapter(this);
-        mDbHelper.open();
+        /*mDbHelper = new DbAdapter(this);
+        mDbHelper.open();*/
 
 
         lista = (ListView)findViewById(R.id.mi_lista);
@@ -120,12 +120,13 @@ public class MainActivity extends AppCompatActivity {
     private void fillData(){
         Cursor mPcCursor;
 
-        mPcCursor = mDbHelper.fetchAllPC();
-        startManagingCursor(mPcCursor);
-
+        //mPcCursor = mDbHelper.fetchAllPC();
+        /*mPcCursor = null;
+        startManagingCursor(mPcCursor);*/
+/*
         String[] from = new String[] { DbAdapter.KEY_PC_MODELO,
             DbAdapter.KEY_PC_MARCA};
-        int[] to = new int[] { R.id.texto_principal, R.id.texto_secundario};
+        int[] to = new int[] { R.id.texto_principal, R.id.texto_secundario};*/
 
         /* PRUEBA IMAGEN -----------------------------------------------------------------------*/
         /*LayoutInflater inflater=this.getLayoutInflater();
@@ -135,12 +136,13 @@ public class MainActivity extends AppCompatActivity {
         //-------------------------------------------------------------------------------------
         System.out.println("---------------PRUEBAS BD EXTERNA------------------");
 
-
         ConexionBD bd = new ConexionBD();
         String[][] pcs = null;
-        pcs = bd.getPCs();
+        //pcs = bd.getPCs();
+        Cursor ccc = bd.getPCs();
+        startManagingCursor(ccc);
         System.out.println("GET PCs");
-        try {
+        /*try {
             if(pcs==null){
                 System.out.println("pcs = null");
             }
@@ -158,12 +160,11 @@ public class MainActivity extends AppCompatActivity {
         }
         catch (Exception e) {
             System.out.println("ALGO FALLO :(");
-        }
-/*
-        String[] from = new String[] { pcs[1][1],
-                pcs[1][2]};
+        }*/
+
+        String[] from = new String[] { "modelo",
+                "marca"};
         int[] to = new int[] { R.id.texto_principal, R.id.texto_secundario};
-*/
 
         System.out.println("---------------FIN PRUEBAS------------------");
         /*
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         lista.setAdapter(adapter);*/
 
         SimpleCursorAdapter pc =
-                new SimpleCursorAdapter(this, R.layout.fila_lista, mPcCursor, from, to);
+                new SimpleCursorAdapter(this, R.layout.fila_lista, ccc/*mPcCursor*/, from, to);
 
         lista.setAdapter(pc);
     }
@@ -245,7 +246,10 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                mDbHelper.deletePC(info.id);
+                /*mDbHelper.deletePC(info.id);*/
+                ConexionBD bd = new ConexionBD();
+                System.out.println("BORRAR " + info.id);
+                bd.delete(info.id, "PCs");
                 fillData();
                 return true;
 
@@ -267,7 +271,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected void editNote(int position, long id) {
         Intent i = new Intent(this, PCedit.class);
-        i.putExtra(DbAdapter.KEY_PC_ROWID, id);
+        System.out.println("PRUEBAS------------: " + id );
+        i.putExtra(/*DbAdapter.KEY_PC_ROWID*/"_id", id);
         startActivityForResult(i, ACTIVITY_EDIT);
     }
 
@@ -296,6 +301,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             System.out.println("NADAA");
+            fillData();
         }
 
     }

@@ -1,5 +1,6 @@
 package es.unizar.eina.allpc;
 
+import android.database.MatrixCursor;
 import android.os.AsyncTask;
 
 import java.io.BufferedInputStream;
@@ -27,17 +28,22 @@ public class ConexionBD {
     private static final String URLINSERTADMIN = "http://allpc.ddns.net/allpc/insertAdmin.php";
     private static final String URLUPDATEPC = "http://allpc.ddns.net/allpc/updatePC.php";
     private static final String URLDELETE = "http://allpc.ddns.net/allpc/deletePC.php";
+    private static String DevolverPC = "http://allpc.ddns.net/allpc/devolverPC.php?tabla=PCs&id=";
 
-    public static String[][] getPCs() {
-
-        class GetPCsJSON extends AsyncTask<String, Void, String[][]> {
-
+    //public static String[][] getPCs() {
+    public static MatrixCursor getPCs() {
+//        class GetPCsJSON extends AsyncTask<String, Void, String[][]> {
+        class GetPCsJSON extends AsyncTask<String, Void, MatrixCursor> {
             @Override
-            protected String[][] doInBackground(String... params) {
+            protected MatrixCursor doInBackground(String... params) {
+//            protected String[][] doInBackground(String... params) {
 
                 HttpURLConnection con = null;
                 String[][] pcs = null;
-
+                MatrixCursor mc = new MatrixCursor(new String[] {
+                        "_id", "modelo", "marca", "ram", "procesador", "so",
+                        "almacenamiento", "pantalla", "grafica", "conexiones"
+                });
                 try {
                     URL url = new URL(params[0]);
                     con = (HttpURLConnection) url.openConnection();
@@ -58,7 +64,8 @@ public class ConexionBD {
                             sb.append(line + "\n");
                         }
                         String pcsCod = sb.toString();
-                        pcs = obtenPcs(pcsCod);
+                        //pcs = obtenPcs(pcsCod);
+                        mc = obtenPcs(pcsCod);
                     }
 
                 } catch (Exception e) {
@@ -73,23 +80,41 @@ public class ConexionBD {
                 else {
                     System.out.println("devuelve algo getPC");
                 }
-                return pcs;
+                return mc;
+                //return pcs;
             }
 
-            protected String[][] obtenPcs(String jsonCodificado){
+            //protected String[][] obtenPcs(String jsonCodificado){
+            protected MatrixCursor obtenPcs(String jsonCodificado){
                 //Obtenemos el Objeto a partir del String
                 JSONArray pcsCod = null;
                 String[][] pcs = null;
+
+                MatrixCursor mc = new MatrixCursor(new String[] {
+                        "_id", "modelo", "marca", "ram", "procesador", "so",
+                        "almacenamiento", "pantalla", "grafica", "conexiones"
+                });
+
                 try {
                     pcsCod = new JSONArray(jsonCodificado);
                     //Obtenemos un array de JSON
                     pcs = new String [pcsCod.length()][10];
+
+
+
                     for (int i = 0; i < pcsCod.length(); i++) {
                         //Como cada elemento del array está en JSON,
                         //obtenemos el objeto JSON correspondiente
                         JSONObject d = pcsCod.getJSONObject(i);
+                        mc.addRow(new Object[] {
+                                d.getString("_id"), d.getString("modelo"),
+                                d.getString("marca"), d.getString("ram"),
+                                d.getString("procesador"), d.getString("so"),
+                                d.getString("almacenamiento"), d.getString("pantalla"),
+                                d.getString("grafica"), d.getString("conexiones")
+                        });
                         //Obtenemos los datos del susodicho
-                        pcs[i][0] = d.getString("_id");
+                       /* pcs[i][0] = d.getString("_id");
                         pcs[i][1] = d.getString("modelo");
                         pcs[i][2] = d.getString("marca");
                         pcs[i][3] = d.getString("ram");
@@ -98,7 +123,8 @@ public class ConexionBD {
                         pcs[i][6] = d.getString("almacenamiento");
                         pcs[i][7] = d.getString("pantalla");
                         pcs[i][8] = d.getString("grafica");
-                        pcs[i][9] = d.getString("conexiones");
+                        pcs[i][9] = d.getString("conexiones");*/
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -109,23 +135,156 @@ public class ConexionBD {
                 else {
                     System.out.println("devuelve algo obtPC");
                 }
-                return pcs;
+                //return pcs;
+                return mc;
             }
         }
         GetPCsJSON g = new GetPCsJSON();
         g.execute(URLGETPCS);
         String[][] pcs = new String[1][1];
         pcs[0][0] = "ERROR!!!!";
+        MatrixCursor mc = new MatrixCursor(new String[] {
+                "_id", "modelo", "marca", "ram", "procesador", "so",
+                "almacenamiento", "pantalla", "grafica", "conexiones"
+        });
         try {
-            pcs = g.get();
+            //pcs = g.get();
+            mc = g.get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        return pcs;
+        return mc;
+        //return pcs;
     }
+
+
+
+    public static MatrixCursor getPC(long id) {
+        class GetPCsJSON extends AsyncTask<String, Void, MatrixCursor> {
+            @Override
+            protected MatrixCursor doInBackground(String... params) {
+                HttpURLConnection con = null;
+                String[][] pcs = null;
+                MatrixCursor mc = new MatrixCursor(new String[] {
+                        "_id", "modelo", "marca", "ram", "procesador", "so",
+                        "almacenamiento", "pantalla", "grafica", "conexiones"
+                });
+                try {
+                    URL url = new URL(params[0]);
+                    con = (HttpURLConnection) url.openConnection();
+
+                    // Obtener el estado del recurso
+                    int statusCode = con.getResponseCode();
+
+                    if(statusCode==200) {
+
+                        InputStream in = new BufferedInputStream(con.getInputStream());
+                        BufferedReader reader = new BufferedReader
+                                (new InputStreamReader(in, "UTF-8"), 8);
+                        StringBuilder sb = new StringBuilder();
+
+                        String line = null;
+                        while ((line = reader.readLine()) != null)
+                        {
+                            sb.append(line + "\n");
+                        }
+                        String pcsCod = sb.toString();
+                        mc = obtenPcs(pcsCod);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }finally {
+                    if (con != null) con.disconnect();
+                }
+                if (pcs==null){
+                    System.out.println("devuelve NULL getPC");
+                }
+                else {
+                    System.out.println("devuelve algo getPC");
+                }
+                return mc;
+            }
+
+            protected MatrixCursor obtenPcs(String jsonCodificado){
+                //Obtenemos el Objeto a partir del String
+                JSONArray pcsCod = null;
+                String[][] pcs = null;
+
+                MatrixCursor mc = new MatrixCursor(new String[] {
+                        "_id", "modelo", "marca", "ram", "procesador", "so",
+                        "almacenamiento", "pantalla", "grafica", "conexiones"
+                });
+
+                try {
+                    pcsCod = new JSONArray(jsonCodificado);
+                    //Obtenemos un array de JSON
+                    pcs = new String [1][10];
+
+                    JSONObject d = pcsCod.getJSONObject(0);
+                    mc.addRow(new Object[] {
+                            d.getString("_id"), d.getString("modelo"),
+                            d.getString("marca"), d.getString("ram"),
+                            d.getString("procesador"), d.getString("so"),
+                            d.getString("almacenamiento"), d.getString("pantalla"),
+                            d.getString("grafica"), d.getString("conexiones")
+                    });
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (pcs==null){
+                    System.out.println("devuelve NULL obtPC");
+                }
+                else {
+                    System.out.println("devuelve algo obtPC");
+                }
+                return mc;
+            }
+        }
+        GetPCsJSON g = new GetPCsJSON();
+        String consulta = DevolverPC + id;
+        System.out.println(consulta);
+        g.execute(consulta);
+        String[][] pcs = new String[1][1];
+        pcs[0][0] = "ERROR!!!!";
+        MatrixCursor mc = new MatrixCursor(new String[] {
+                "_id", "modelo", "marca", "ram", "procesador", "so",
+                "almacenamiento", "pantalla", "grafica", "conexiones"
+        });
+        try {
+            //pcs = g.get();
+            mc = g.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return mc;
+        //return pcs;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static String[][] getAdmins() {
 
@@ -302,9 +461,9 @@ public class ConexionBD {
         return result;
     }
 
-    public static boolean updatePC(String _id, String modelo, String marca,String ram,
-                                   String procesador, String so, String almacenamiento,
-                                   String pantalla, String grafica, String conexiones) {
+    public static boolean updatePC(long _id, String modelo, String marca, int ram,
+                                   String procesador, String so, int almacenamiento,
+                                   int pantalla, String grafica, String conexiones) {
 
         class UpdatePCsJSON extends AsyncTask<String, Void, String> {
 
@@ -335,6 +494,7 @@ public class ConexionBD {
         }
         UpdatePCsJSON g = new UpdatePCsJSON();
         String url = URLUPDATEPC+"?_id="+_id+"&modelo="+modelo+"&marca="+marca+"&ram="+ram+"&procesador="+procesador+"&so="+so+"&almacenamiento="+almacenamiento+"&pantalla="+pantalla+"&grafica="+grafica+"&conexiones="+conexiones;
+        System.out.println(url);
         g.execute(url);
         boolean result = false;
         try {
@@ -350,7 +510,7 @@ public class ConexionBD {
         return result;
     }
 
-    public static boolean delete(String id, String tabla) {
+    public static boolean delete(long id, String tabla) {
 
         class DeleteJSON extends AsyncTask<String, Void, String> {
 
@@ -381,6 +541,7 @@ public class ConexionBD {
         }
         DeleteJSON g = new DeleteJSON();
         String url = URLDELETE + "?id="+id+"&tabla="+tabla;
+        System.out.println(url);
         g.execute(url);
         boolean result = false;
         try {
