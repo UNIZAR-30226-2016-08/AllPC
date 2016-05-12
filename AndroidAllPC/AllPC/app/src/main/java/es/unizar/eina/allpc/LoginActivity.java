@@ -3,15 +3,13 @@ package es.unizar.eina.allpc;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.MatrixCursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -19,6 +17,13 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
 
 
+    /**
+     * Metodo onCreate
+     *
+     * Pagina con 2 campos y un boton de login
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +40,25 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Metodo login
+     *
+     * Recibe los datos introducidos en el formulario de login
+     */
     private void login(){
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
         comprobarDatos(email, password);
     }
 
+    /**
+     * Metodo comprobarDatos
+     *
+     * Comprueba con la base de datos el email y pass introducidas
+     *
+     * @param email
+     * @param password
+     */
     private void comprobarDatos(String email, String password){
         ConexionBD bd = new ConexionBD();
         String[][] admins = bd.getAdmins();
@@ -66,6 +84,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Metodo loginCorrecto
+     *
+     * Devuelve true al MainActivity para indicar que el login
+     * ha sido correcto
+     */
     private void loginCorrecto() {
         boolean loginAdmin = true;
         Bundle bundle = new Bundle();
@@ -76,7 +100,15 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    //Capturar pulsacion del boton atras
+    /**
+     * Metodo onKeyDown
+     *
+     * Captura la pulsacion del boton atras
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
