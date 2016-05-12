@@ -166,8 +166,10 @@ public class PCedit extends AppCompatActivity {
                     pc.getColumnIndexOrThrow("procesador")));
             mSOText.setText(pc.getString(
                     pc.getColumnIndexOrThrow("so")));
-            mHDDText.setSelection(1);
-            mPantallaText.setSelection(1);
+            mHDDText.setSelection(spinnerPositionHDD(
+                    pc.getString(pc.getColumnIndex("almacenamiento"))));
+            mPantallaText.setSelection(spinnerPositionPantalla(
+                    pc.getString(pc.getColumnIndex("pantalla"))));
             mGraficaText.setText(pc.getString(
                     pc.getColumnIndexOrThrow("grafica")));
             mConexionesText.setText(pc.getString(
@@ -187,6 +189,38 @@ public class PCedit extends AppCompatActivity {
                 return 3;
             case "16":
                 return 4;
+        }
+        return 1;
+    }
+
+    private int spinnerPositionHDD (String valor){
+        System.out.println("VALOOOOOR HDD---------------- " + valor);
+        switch (valor){
+            case "128":
+                return 0;
+            case "256":
+                return 1;
+            case "512":
+                return 2;
+            case "1024":
+                return 3;
+            case "2048":
+                return 4;
+        }
+        return 1;
+    }
+
+    private int spinnerPositionPantalla (String valor){
+        System.out.println("VALOOOOOR PANTALLA---------------- " + valor);
+        switch (valor){
+            case "10":
+                return 0;
+            case "12":
+                return 1;
+            case "15.7":
+                return 2;
+            case "17":
+                return 3;
         }
         return 1;
     }
