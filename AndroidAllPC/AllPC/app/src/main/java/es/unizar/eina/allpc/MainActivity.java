@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("ALGO FALLO :(");
         }*/
 
+        System.out.println("sfasdas");
         String[] from = new String[] { "modelo",
                 "marca"};
         int[] to = new int[] { R.id.texto_principal, R.id.texto_secundario};
