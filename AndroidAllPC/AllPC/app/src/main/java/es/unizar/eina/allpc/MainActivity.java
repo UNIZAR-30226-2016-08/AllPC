@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         //Iniciar en modo usuario standart
         loginAdmin = false;
 
+
         lista = (ListView)findViewById(R.id.mi_lista);
         fillData();
 
