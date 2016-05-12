@@ -3,6 +3,7 @@ package es.unizar.eina.allpc;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.MatrixCursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -17,16 +18,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEmailView;
     private EditText mPasswordView;
 
-    private DbAdapter mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        mDbHelper = new DbAdapter(this);
-        mDbHelper.open();
-
         mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
 
@@ -42,18 +38,21 @@ public class LoginActivity extends AppCompatActivity {
     private void login(){
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-
-        System.out.println("LOGIN------> "  + email + " - " + password);
-
         comprobarDatos(email, password);
     }
 
     private void comprobarDatos(String email, String password){
-        //comprobacion con la base de datos
-        if(mDbHelper.login(email, password)){
-            loginCorrecto();
+        ConexionBD bd = new ConexionBD();
+        String[][] admins = bd.getAdmins();
+        boolean login = false;
+        for(int i=0; i<admins.length; i++){
+
+            if((email.equals(admins[i][2])) && (password.equals(admins[i][3]))){
+                login=true;
+                loginCorrecto();
+            }
         }
-        else{
+        if(!login){
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("Error...");
             alertDialog.setMessage("Login Incorrecto");
