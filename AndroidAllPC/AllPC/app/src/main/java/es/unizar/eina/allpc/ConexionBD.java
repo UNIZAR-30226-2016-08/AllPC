@@ -368,9 +368,9 @@ public class ConexionBD {
         return admins;
     }
 
-    public static boolean insertPC(String modelo, String marca,String ram,
-                                   String procesador, String so, String almacenamiento,
-                                   String pantalla, String grafica, String conexiones) {
+    public static boolean insertPC(String modelo, String marca, int ram,
+                                   String procesador, String so, int almacenamiento,
+                                   double pantalla, String grafica, String conexiones) {
 
         class InsertPCsJSON extends AsyncTask<String, Void, String> {
 
@@ -464,7 +464,7 @@ public class ConexionBD {
 
     public static boolean updatePC(long _id, String modelo, String marca, int ram,
                                    String procesador, String so, int almacenamiento,
-                                   int pantalla, String grafica, String conexiones) {
+                                   double pantalla, String grafica, String conexiones) {
 
         class UpdatePCsJSON extends AsyncTask<String, Void, String> {
 

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 public class PCedit extends AppCompatActivity {
 
@@ -64,7 +65,7 @@ public class PCedit extends AppCompatActivity {
                     : null;
         }
 
-        //RELLENAR EL SPINNER--------------------------------------------------------------
+        //RELLENAR EL SPINNER RAM---------------------------------------------------
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
                 this, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -79,7 +80,34 @@ public class PCedit extends AppCompatActivity {
         mRamText.setAdapter(adapter);
         //-----------------------------------------------
 
+        //RELLENAR EL SPINNER HDD--------------------------------------------------------
+        ArrayAdapter<CharSequence> adapter2 = new ArrayAdapter<CharSequence>(
+                this, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        adapter2.add("128GB");
+        adapter2.add("256GB");
+        adapter2.add("512GB");
+        adapter2.add("1TB");
+        adapter2.add("2TB");
+
+        mHDDText = (Spinner) findViewById(R.id.hdd);
+        mHDDText.setAdapter(adapter2);
+        //-----------------------------------------------
+
+        //RELLENAR EL SPINNER PANTALLA---------------------------------------------------------
+        ArrayAdapter<CharSequence> adapter3 = new ArrayAdapter<CharSequence>(
+                this, android.R.layout.simple_spinner_item);
+        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        adapter3.add("10 pulgadas");
+        adapter3.add("12 pulgadas");
+        adapter3.add("15.7 pulgadas");
+        adapter3.add("17 pulgadas");
+
+        mPantallaText = (Spinner) findViewById(R.id.pantalla);
+        mPantallaText.setAdapter(adapter3);
+        //-----------------------------------------------
 
         populateFields();
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -196,11 +224,59 @@ public class PCedit extends AppCompatActivity {
     private void saveState() {
         String modelo = mModeloText.getText().toString();
         String marca = mMarcaText.getText().toString();
-        int ram = 8;
+        int ram = 0;
+        switch (mRamText.getSelectedItemPosition()){
+            case 0:
+                ram = 1;
+                break;
+            case 1:
+                ram = 2;
+                break;
+            case 2:
+                ram = 4;
+                break;
+            case 3:
+                ram = 8;
+                break;
+            case 4:
+                ram = 16;
+                break;
+        }
         String procesador = mProcesadorText.getText().toString();
         String so = mSOText.getText().toString();
-        int hdd = 500;
-        int pantalla = 15;
+        int hdd = 0;
+        switch (mHDDText.getSelectedItemPosition()){
+            case 0:
+                hdd = 128;
+                break;
+            case 1:
+                hdd = 256;
+                break;
+            case 2:
+                hdd = 512;
+                break;
+            case 3:
+                hdd = 1024;
+                break;
+            case 4:
+                hdd = 2048;
+                break;
+        }
+        double pantalla = 0;
+        switch (mPantallaText.getSelectedItemPosition()){
+            case 0:
+                pantalla = 10;
+                break;
+            case 1:
+                pantalla = 12;
+                break;
+            case 2:
+                pantalla = 15.7;
+                break;
+            case 3:
+                pantalla = 17;
+                break;
+        }
         String grafica = mGraficaText.getText().toString();
         String conexiones = mConexionesText.getText().toString();
 
@@ -209,10 +285,12 @@ public class PCedit extends AppCompatActivity {
         }
 
         if (mRowId == null) {
-            long id = mDbHelper.createPC(modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
-            if (id > 0) {
+            //long id = mDbHelper.createPC(modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
+            ConexionBD bd= new ConexionBD();
+            bd.insertPC(modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
+            /*if (id > 0) {
                 mRowId = id;
-            }
+            }*/
         }
         else {
             //mDbHelper.updatePC(mRowId, modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
