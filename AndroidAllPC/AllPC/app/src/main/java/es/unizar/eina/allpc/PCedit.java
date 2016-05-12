@@ -177,6 +177,7 @@ public class PCedit extends AppCompatActivity {
         }
     }
 
+
     private int spinnerPositionRAM (String valor){
         switch (valor){
             case "1":
