@@ -34,146 +34,37 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean loginAdmin;
-    /* LISTA DE PC */
-    //----------------------------------------------------------------------------------------
- /*   private String listaPC[]=new String[]{"PC1","PC2","PC3","PC4","PC5","PC6",
-            "PC7","PC8","PC9"};
-
-    private Integer[] imgid={
-            R.drawable.default_pc,
-            R.drawable.default_pc,
-            R.drawable.default_pc,
-            R.drawable.default_pc,
-            R.drawable.default_pc,
-            R.drawable.default_pc,
-            R.drawable.default_pc,
-            R.drawable.default_pc,
-            R.drawable.default_pc
-    };
-*/
-    //private DbAdapter mDbHelper;
     private ListView lista;
+    private ConexionBD bd;
     //----------------------------------------------------------------------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("prueba");
-        loginAdmin = true;
-        /**
-        //DBConnection conexionBD = new DBConnection();
-        //conexionBD.conectar();
-        System.out.println("-----Prueba BBDD-----");
-        System.out.println("-----Prueba PCs-----");
-        String[][] prueba=ConexionBD.getPCs();
-        for (int i = 0; i<prueba.length; i++){
-            for (int j = 0; j<prueba[i].length; j++){
-                System.out.print(prueba[i][j]+"\t");
-            }
-            System.out.println();
-        }
-        System.out.println("-----Prueba Admins-----");
-        prueba=ConexionBD.getPCs();
-        for (int i = 0; i<prueba.length; i++){
-            for (int j = 0; j<prueba[i].length; j++){
-                System.out.print(prueba[i][j]+"\t");
-            }
-            System.out.println();
-        }
-        System.out.println("-----Prueba insert PC-----");
-        ConexionBD.insertPC("prueba","prueba","2","prueba","prueba","3","24.3","prueba","prueba");
-        System.out.println("-----Prueba insert Admin-----");
-        ConexionBD.insertAdmin("prueba","prueba","prueba");
-        System.out.println("-----Prueba update PC-----");
-        ConexionBD.updatePC("2","prueba","prueba","2","prueba","prueba","3","24.3","prueba","prueba");
-*/
-        /*mDbHelper = new DbAdapter(this);
-        mDbHelper.open();*/
-
+        //Iniciar en modo usuario standart
+        loginAdmin = false;
 
         lista = (ListView)findViewById(R.id.mi_lista);
         fillData();
 
-        /* LISTA DE PC */
-        //----------------------------------------------------------------------------------------
-      /*  PCListAdapter adapter=new PCListAdapter(this, listaPC,imgid);
-        lista=(ListView)findViewById(R.id.mi_lista);
-        lista.setAdapter(adapter);*/
-
-        /* ACCION AL PULSAR UN ELEMENTO
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String Slecteditem= listaPC[+position];
-                Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
-            }
-        });*/
+        bd = new ConexionBD();
         registerForContextMenu(lista);
-        //----------------------------------------------------------------------------------------
-
-
-
-
     }
 
     private void fillData(){
-        Cursor mPcCursor;
 
-        //mPcCursor = mDbHelper.fetchAllPC();
-        /*mPcCursor = null;
-        startManagingCursor(mPcCursor);*/
-/*
-        String[] from = new String[] { DbAdapter.KEY_PC_MODELO,
-            DbAdapter.KEY_PC_MARCA};
-        int[] to = new int[] { R.id.texto_principal, R.id.texto_secundario};*/
-
-        /* PRUEBA IMAGEN -----------------------------------------------------------------------*/
-        /*LayoutInflater inflater=this.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.fila_lista,null,true);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-        imageView.setImageResource(R.drawable.default_pc);*/
-        //-------------------------------------------------------------------------------------
-        System.out.println("---------------PRUEBAS BD EXTERNA------------------");
-
-        ConexionBD bd = new ConexionBD();
-        String[][] pcs = null;
-        //pcs = bd.getPCs();
+        //ConexionBD bd = new ConexionBD();
         Cursor ccc = bd.getPCs();
         startManagingCursor(ccc);
         System.out.println("GET PCs");
-        /*try {
-            if(pcs==null){
-                System.out.println("pcs = null");
-            }
-            if(pcs.length==0){
-                System.out.println("pcs = vacio");
-            }
-
-            for(int i=0; i<pcs.length; i++){
-                for(int j=0; j<10; j++) {
-                    System.out.print(pcs[i][j] + " ");
-                }
-                System.out.println("---------");
-            }
-
-        }
-        catch (Exception e) {
-            System.out.println("ALGO FALLO :(");
-        }*/
 
         String[] from = new String[] { "modelo",
                 "marca"};
         int[] to = new int[] { R.id.texto_principal, R.id.texto_secundario};
 
-        System.out.println("---------------FIN PRUEBAS------------------");
-        /*
-        PCListAdapter adapter=new PCListAdapter(this, from, to);
-        lista=(ListView)findViewById(R.id.mi_lista);
-        lista.setAdapter(adapter);*/
-
         SimpleCursorAdapter pc =
-                new SimpleCursorAdapter(this, R.layout.fila_lista, ccc/*mPcCursor*/, from, to);
+                new SimpleCursorAdapter(this, R.layout.fila_lista, ccc, from, to);
 
         lista.setAdapter(pc);
     }
@@ -246,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                /*mDbHelper.deletePC(info.id);*/
-                ConexionBD bd = new ConexionBD();
+
+                //ConexionBD bd = new ConexionBD();
                 System.out.println("BORRAR " + info.id);
                 bd.delete(info.id, "PCs");
                 fillData();
@@ -271,8 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void editNote(int position, long id) {
         Intent i = new Intent(this, PCedit.class);
-        System.out.println("PRUEBAS------------: " + id );
-        i.putExtra(/*DbAdapter.KEY_PC_ROWID*/"_id", id);
+        i.putExtra("_id", id);
         startActivityForResult(i, ACTIVITY_EDIT);
     }
 
