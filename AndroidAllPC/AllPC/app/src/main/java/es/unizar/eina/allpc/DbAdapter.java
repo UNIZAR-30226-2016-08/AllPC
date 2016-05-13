@@ -12,14 +12,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * Simple notes database access helper class. Defines the basic CRUD operations
- * for the notepad example, and gives the ability to list all notes as well as
- * retrieve or modify a specific note.
+ * BASE DE DATOS INTERNA
  *
- * This has been improved from the first version of this tutorial through the
- * addition of better error handling and also using returning a Cursor instead
- * of using a collection of inner classes (which is less scalable and not
- * recommended).
+ * Codigo no utilizado actualmente, en un futuro se quiere tener una base de datos
+ * interna que se actualice al descargar datos de la externa por si acaso la conexion
+ * con la BD externa no funcionara, que el usuario pudiera seguir usando la
+ * aplicacion con los PCs de al menos, la ultima vez que inicio la aplicacion.
+ *
  */
 public class DbAdapter {
 

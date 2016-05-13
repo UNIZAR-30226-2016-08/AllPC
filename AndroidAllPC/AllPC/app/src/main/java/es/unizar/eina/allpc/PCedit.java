@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.Switch;
 
 public class PCedit extends AppCompatActivity {
 
@@ -26,18 +24,14 @@ public class PCedit extends AppCompatActivity {
     private EditText mGraficaText;
     private EditText mConexionesText;
 
-    private EditText mBodyText;
     private Long mRowId;
 
-    private DbAdapter mDbHelper;
+    private ConexionBD mBd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //p3
-        mDbHelper = new DbAdapter(this);
-        mDbHelper.open();
-
+        mBd = new ConexionBD();
 
 
 
@@ -123,37 +117,19 @@ public class PCedit extends AppCompatActivity {
     }
 
 
+    /**
+     * Metodo populateFields
+     *
+     * Si el Id es distinto de null, recibe de la base de datos
+     * los datos del PC con el id recibido
+     */
     private void populateFields() {
         if (mRowId != null) {
-            //Cursor pc = mDbHelper.fetchPC(mRowId);
-            ConexionBD bd = new ConexionBD();
-            Cursor pc = bd.getPC(mRowId);
+            Cursor pc = mBd.getPC(mRowId);
             startManagingCursor(pc);
-            /*mIdText.setText(pc.getString(
-                    pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_ROWID)));
-            mModeloText.setText(pc.getString(
-                    pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_MODELO)));
-            mMarcaText.setText(pc.getString(
-                    pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_MARCA)));
-            mRamText.setSelection(spinnerPositionRAM(
-                    pc.getString(pc.getColumnIndex(DbAdapter.KEY_PC_RAM))));
-            mProcesadorText.setText(pc.getString(
-                    pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_PROCESADOR)));
-            mSOText.setText(pc.getString(
-                    pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_SO)));
-            mHDDText.setSelection(1);
-            mPantallaText.setSelection(1);
-            mGraficaText.setText(pc.getString(
-                    pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_GRAFICA)));
-            mConexionesText.setText(pc.getString(
-                    pc.getColumnIndexOrThrow(DbAdapter.KEY_PC_CONEXIONES)));*/
-            System.out.println("------------------------------");
             pc.moveToFirst();
-            /*String[] a = pc.getColumnNames();
-            System.out.println(a[0] + " " + a[1]);
-            System.out.println(pc.getColumnIndex(a[0]));
-            System.out.println(pc.getString(pc.getColumnIndex(a[2])));
-            System.out.println("------------------------------");*/
+
+            // Rellenar campos del formulario
             mIdText.setText(pc.getString(
                     pc.getColumnIndexOrThrow("_id")));
             mModeloText.setText(pc.getString(
@@ -178,6 +154,15 @@ public class PCedit extends AppCompatActivity {
     }
 
 
+    /**
+     * Metodo spinnerPositionRAM
+     *
+     * Recibe el valor de la RAM de un PC y devuelve la posicion del spinner donde
+     * esta ese valor
+     *
+     * @param valor
+     * @return
+     */
     private int spinnerPositionRAM (String valor){
         switch (valor){
             case "1":
@@ -194,8 +179,16 @@ public class PCedit extends AppCompatActivity {
         return 1;
     }
 
+    /**
+     * Metodo spinnerPositionHDD
+     *
+     * Recibe el valor de la HDD de un PC y devuelve la posicion del spinner donde
+     * esta ese valor
+     *
+     * @param valor
+     * @return
+     */
     private int spinnerPositionHDD (String valor){
-        System.out.println("VALOOOOOR HDD---------------- " + valor);
         switch (valor){
             case "128":
                 return 0;
@@ -211,8 +204,17 @@ public class PCedit extends AppCompatActivity {
         return 1;
     }
 
+
+    /**
+     * Metodo spinnerPositionPantalla
+     *
+     * Recibe el valor de la Pantalla de un PC y devuelve la posicion del spinner donde
+     * esta ese valor
+     *
+     * @param valor
+     * @return
+     */
     private int spinnerPositionPantalla (String valor){
-        System.out.println("VALOOOOOR PANTALLA---------------- " + valor);
         switch (valor){
             case "10":
                 return 0;
@@ -227,25 +229,28 @@ public class PCedit extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveState();
-        outState.putSerializable(DbAdapter.KEY_PC_ROWID, mRowId);
-    }
-    @Override
     protected void onPause() {
         super.onPause();
         saveState();
         Intent mIntent = new Intent();
         setResult(RESULT_OK, mIntent);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         populateFields();
     }
 
-    //Capturar pulsacion del boton atras
+    /**
+     * Metodo onKeyDown
+     *
+     * Captura la pulsacion del boton atras
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -320,19 +325,10 @@ public class PCedit extends AppCompatActivity {
         }
 
         if (mRowId == null) {
-            //long id = mDbHelper.createPC(modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
-            ConexionBD bd= new ConexionBD();
-            bd.insertPC(modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
-            /*if (id > 0) {
-                mRowId = id;
-            }*/
+            mBd.insertPC(modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
         }
         else {
-            //mDbHelper.updatePC(mRowId, modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
-            ConexionBD bd = new ConexionBD();
-            System.out.println("ACTUALIZAR PC");
-            bd.updatePC(mRowId, modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
-            System.out.println("ACTUALIZAR PC 2");
+            mBd.updatePC(mRowId, modelo, marca, ram, procesador, so, hdd, pantalla, grafica, conexiones);
         }
     }
 }
