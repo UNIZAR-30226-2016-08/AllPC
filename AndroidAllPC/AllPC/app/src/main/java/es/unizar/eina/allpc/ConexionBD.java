@@ -4,12 +4,14 @@ import android.database.MatrixCursor;
 import android.os.AsyncTask;
 
 import java.io.BufferedInputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
@@ -28,7 +30,7 @@ public class ConexionBD {
     private static final String URLINSERTADMIN = "http://allpc.ddns.net/allpc/insertAdmin.php";
     private static final String URLUPDATEPC = "http://allpc.ddns.net/allpc/updatePC.php";
     private static final String URLDELETE = "http://allpc.ddns.net/allpc/deletePC.php";
-    private static String DevolverPC = "http://allpc.ddns.net/allpc/devolverPC.php?tabla=PCs&id=";
+    private static final String DevolverPC = "http://allpc.ddns.net/allpc/devolverPC.php?tabla=PCs&id=";
     private static String DevolverAdmin = "http://allpc.ddns.net/allpc/devolverAdmin.php?tabla=Administradores&id=";
 
     public static MatrixCursor getPCs() {
@@ -349,11 +351,23 @@ public class ConexionBD {
             }
         }
         InsertPCsJSON g = new InsertPCsJSON();
-        String url = URLINSERTPC + "?modelo="+modelo+"&marca="+marca+"&ram="+ram+"&procesador="+procesador+"&so="+so+"&almacenamiento="+almacenamiento+"&pantalla="+pantalla+"&grafica="+grafica+"&conexiones="+conexiones;
-        g.execute(url);
+        try {
+            String url = null;
+            url = URLINSERTPC + "?modelo="+ URLEncoder.encode(modelo, "UTF-8")+"&marca="
+                    +URLEncoder.encode(marca, "UTF-8")+"&ram="
+                    +URLEncoder.encode(String.valueOf(ram), "UTF-8")+"&procesador="
+                    +URLEncoder.encode(procesador, "UTF-8")+"&so="+URLEncoder.encode(so, "UTF-8")
+                    +"&almacenamiento="+URLEncoder.encode(String.valueOf(almacenamiento), "UTF-8")
+                    +"&pantalla="+URLEncoder.encode(String.valueOf(pantalla), "UTF-8")+"&grafica="
+                    +URLEncoder.encode(grafica, "UTF-8")+"&conexiones="
+                    +URLEncoder.encode(conexiones, "UTF-8");
+            g.execute(url);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         boolean result = false;
         try {
-            if (g.get().compareTo("ok")==0){
+            if (g.get() != null && g.get().compareTo("ok")==0){
                 result = true;
             }
         } catch (InterruptedException e) {
@@ -416,11 +430,23 @@ public class ConexionBD {
             }
         }
         UpdatePCsJSON g = new UpdatePCsJSON();
-        String url = URLUPDATEPC+"?_id="+_id+"&modelo="+modelo+"&marca="+marca+"&ram="+ram+"&procesador="+procesador+"&so="+so+"&almacenamiento="+almacenamiento+"&pantalla="+pantalla+"&grafica="+grafica+"&conexiones="+conexiones;
-        g.execute(url);
+        try {
+            String url = null;
+            url = URLUPDATEPC+"?_id="+_id + "?modelo="+ URLEncoder.encode(modelo, "UTF-8")+"&marca="
+                    +URLEncoder.encode(marca, "UTF-8")+"&ram="
+                    +URLEncoder.encode(String.valueOf(ram), "UTF-8")+"&procesador="
+                    +URLEncoder.encode(procesador, "UTF-8")+"&so="+URLEncoder.encode(so, "UTF-8")
+                    +"&almacenamiento="+URLEncoder.encode(String.valueOf(almacenamiento), "UTF-8")
+                    +"&pantalla="+URLEncoder.encode(String.valueOf(pantalla), "UTF-8")+"&grafica="
+                    +URLEncoder.encode(grafica, "UTF-8")+"&conexiones="
+                    +URLEncoder.encode(conexiones, "UTF-8");
+            g.execute(url);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         boolean result = false;
         try {
-            if (g.get().compareTo("ok")==0){
+            if (g.get() != null && g.get().compareTo("ok")==0){
                 result = true;
             }
         } catch (InterruptedException e) {
