@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_LOGIN=0;
     private static final int ACTIVITY_CREATE=1;
     private static final int ACTIVITY_EDIT=2;
+    private static final int ACTIVITY_COMPARADOR=3;
 
     private static final int MENU_LOGIN = Menu.FIRST;
     private static final int MENU_COMPARADOR = Menu.FIRST + 1;
@@ -33,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView mLista;
     private ConexionBD mBd;
 
-    private long mid1 = -1;
-    private long mid2 = -1;
+    private long mid1 = 1;
+    private long mid2 = 3;
 
 
     @Override
@@ -248,10 +249,10 @@ public class MainActivity extends AppCompatActivity {
      * Crea un activity PcComparator
      */
     private void verComparador(long id1, long id2) {
-        Intent i = new Intent(this, PCedit.class);
+        Intent i = new Intent(this, PcComparator.class);
         i.putExtra("id1", id1);
         i.putExtra("id2", id2);
-        startActivityForResult(i, ACTIVITY_EDIT);
+        startActivityForResult(i, ACTIVITY_COMPARADOR);
     }
 
     /**

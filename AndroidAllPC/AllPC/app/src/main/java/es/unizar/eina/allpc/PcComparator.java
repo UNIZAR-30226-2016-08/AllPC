@@ -121,7 +121,7 @@ public class PcComparator extends AppCompatActivity {
         }
 
         if (mId2 != -1) {
-            Cursor pc = mBd.getPC(mId1);
+            Cursor pc = mBd.getPC(mId2);
             startManagingCursor(pc);
             pc.moveToFirst();
 
