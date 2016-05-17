@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView mLista;
     private ConexionBD mBd;
 
+    private long mid1 = -1;
+    private long mid2 = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 login();
                 return true;
             case MENU_COMPARADOR:
+                verComparador(mid1, mid2);
                 return true;
             case MENU_CREAR_PC:
                 crearPC();
@@ -184,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
             case EDIT_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                editNote(info.position, info.id);
+                editPc(info.position, info.id);
                 return true;
 
             case SHOW_ID:
@@ -211,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
      * @param position
      * @param id
      */
-    protected void editNote(int position, long id) {
+    protected void editPc(int position, long id) {
         Intent i = new Intent(this, PCedit.class);
         i.putExtra("_id", id);
         startActivityForResult(i, ACTIVITY_EDIT);
@@ -235,6 +239,19 @@ public class MainActivity extends AppCompatActivity {
     private void login(){
         Intent i = new Intent(this, LoginActivity.class);
         startActivityForResult(i, ACTIVITY_LOGIN);
+    }
+
+
+    /**
+     * Metodo verComparador
+     *
+     * Crea un activity PcComparator
+     */
+    private void verComparador(long id1, long id2) {
+        Intent i = new Intent(this, PCedit.class);
+        i.putExtra("id1", id1);
+        i.putExtra("id2", id2);
+        startActivityForResult(i, ACTIVITY_EDIT);
     }
 
     /**
