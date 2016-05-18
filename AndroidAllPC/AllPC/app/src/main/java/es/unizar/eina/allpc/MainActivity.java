@@ -265,6 +265,14 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(i, ACTIVITY_COMPARADOR);
     }
 
+    /**
+     * Metodo anyadirComparador
+     *
+     * Recibe un ID y modifica la variable midx correspondiente
+     * para mostrar el PC en el comparador.
+     *
+     * @param id
+     */
     private void anyadirComparador(long id){
         if(mid1==0){
             mid1 = id;
@@ -273,8 +281,6 @@ public class MainActivity extends AppCompatActivity {
             mid2 = mid1;
             mid1 = id;
         }
-        System.out.println("mId1------------> " + mid1);
-        System.out.println("mId2------------> " + mid2);
     }
 
     /**
