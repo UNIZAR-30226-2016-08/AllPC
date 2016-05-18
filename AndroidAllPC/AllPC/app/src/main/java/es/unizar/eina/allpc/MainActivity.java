@@ -28,14 +28,15 @@ public class MainActivity extends AppCompatActivity {
     private static final int SHOW_ID = Menu.FIRST + 4;
     private static final int DELETE_ID = Menu.FIRST + 5;
     private static final int EDIT_ID = Menu.FIRST + 6;
+    private static final int ADD_ID = Menu.FIRST + 7;
 
 
     private boolean mLoginAdmin;
     private ListView mLista;
     private ConexionBD mBd;
 
-    private long mid1 = 1;
-    private long mid2 = 3;
+    private long mid1 = 0;
+    private long mid2 = 0;
 
 
     @Override
@@ -165,6 +166,9 @@ public class MainActivity extends AppCompatActivity {
             menu.add(Menu.NONE, DELETE_ID, Menu.NONE, "Borrar PC");
             menu.add(Menu.NONE, EDIT_ID, Menu.NONE, "Editar PC");
         }
+        else{
+            menu.add(Menu.NONE, ADD_ID, Menu.NONE, "Añadir al comparador");
+        }
     }
 
 
@@ -180,9 +184,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         //AdapterView.AdapterContextMenuInfo uNote = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo(); //p6
+        AdapterView.AdapterContextMenuInfo info;
         switch(item.getItemId()) {
             case DELETE_ID:
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 mBd.delete(info.id, "PCs");
                 fillData();
                 return true;
@@ -193,6 +198,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case SHOW_ID:
+                return true;
+
+            case ADD_ID:
+                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                anyadirComparador(info.id);
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -209,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Metodo editNote
+     * Metodo editPc
      *
      * Recibe el id del PC a editar y crea un activity PCedit
      *
@@ -253,6 +263,18 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("id1", id1);
         i.putExtra("id2", id2);
         startActivityForResult(i, ACTIVITY_COMPARADOR);
+    }
+
+    private void anyadirComparador(long id){
+        if(mid1==0){
+            mid1 = id;
+        }
+        else{
+            mid2 = mid1;
+            mid1 = id;
+        }
+        System.out.println("mId1------------> " + mid1);
+        System.out.println("mId2------------> " + mid2);
     }
 
     /**
