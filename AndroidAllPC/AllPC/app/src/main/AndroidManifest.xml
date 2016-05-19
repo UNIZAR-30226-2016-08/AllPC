@@ -27,7 +27,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".PcComparator" />
-        <activity android:name=".PCedit"></activity>
+        <activity android:name=".PCedit" />
     </application>
 
 </manifest>

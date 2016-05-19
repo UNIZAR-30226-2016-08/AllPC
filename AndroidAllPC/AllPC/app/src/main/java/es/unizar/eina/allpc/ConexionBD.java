@@ -28,7 +28,7 @@ public class ConexionBD {
     private static final String URLGETADMINS = "http://allpc.ddns.net/allpc/PCs.php?tabla=Administradores";
     private static final String URLINSERTPC = "http://allpc.ddns.net/allpc/insertPC.php";
     private static final String URLINSERTADMIN = "http://allpc.ddns.net/allpc/insertAdmin.php";
-    private static final String URLUPDATEPC = "http://allpc.ddns.net/allpcCambiado/updatePC.php";
+    private static final String URLUPDATEPC = "http://allpc.ddns.net/allpc/updatePC.php";
     private static final String URLDELETE = "http://allpc.ddns.net/allpc/deletePC.php";
     private static final String DevolverPC = "http://allpc.ddns.net/allpc/devolverPC.php?tabla=PCs&id=";
     private static String DevolverAdmin = "http://allpc.ddns.net/allpc/devolverAdmin.php?tabla=Administradores&id=";
@@ -432,7 +432,8 @@ public class ConexionBD {
         UpdatePCsJSON g = new UpdatePCsJSON();
         try {
             String url = null;
-            url = URLUPDATEPC+"?_id="+_id + "?modelo="+ URLEncoder.encode(modelo, "UTF-8")+"&marca="
+            url = URLUPDATEPC + "?_id=" + URLEncoder.encode(String.valueOf(_id), "UTF-8")
+                    +"&modelo="+ URLEncoder.encode(modelo, "UTF-8")+"&marca="
                     +URLEncoder.encode(marca, "UTF-8")+"&ram="
                     +URLEncoder.encode(String.valueOf(ram), "UTF-8")+"&procesador="
                     +URLEncoder.encode(procesador, "UTF-8")+"&so="+URLEncoder.encode(so, "UTF-8")
@@ -440,8 +441,6 @@ public class ConexionBD {
                     +"&pantalla="+URLEncoder.encode(String.valueOf(pantalla), "UTF-8")+"&grafica="
                     +URLEncoder.encode(grafica, "UTF-8")+"&conexiones="
                     +URLEncoder.encode(conexiones, "UTF-8");
-
-            System.out.println(url);
 
             g.execute(url);
         } catch (UnsupportedEncodingException e) {
