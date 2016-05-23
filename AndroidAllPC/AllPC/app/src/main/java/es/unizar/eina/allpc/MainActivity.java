@@ -1,5 +1,7 @@
 package es.unizar.eina.allpc;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
@@ -275,10 +277,24 @@ public class MainActivity extends AppCompatActivity {
      * Crea un activity PcComparator
      */
     private void verComparador(long id1, long id2) {
-        Intent i = new Intent(this, PcComparator.class);
-        i.putExtra("id1", id1);
-        i.putExtra("id2", id2);
-        startActivityForResult(i, ACTIVITY_COMPARADOR);
+        if(mid1==0 || mid2==0){
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Aviso");
+            alertDialog.setMessage("Debes seleccionar al menos 2 PC");
+            alertDialog.setButton("Aceptar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            alertDialog.setIcon(R.drawable.logo_fondo);
+            alertDialog.show();
+        }
+        else {
+            Intent i = new Intent(this, PcComparator.class);
+            i.putExtra("id1", id1);
+            i.putExtra("id2", id2);
+            startActivityForResult(i, ACTIVITY_COMPARADOR);
+        }
     }
 
     /**
