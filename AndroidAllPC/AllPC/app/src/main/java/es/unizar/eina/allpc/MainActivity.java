@@ -270,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(i, ACTIVITY_LOGIN);
     }
 
-
     /**
      * Metodo verComparador
      *
