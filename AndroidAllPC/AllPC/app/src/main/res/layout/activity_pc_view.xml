@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#d5ddf8">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:gravity="left">
+
+        <TextView android:id="@+id/modelo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modelo1"
+            android:layout_gravity="center_horizontal|right"
+            android:layout_margin="@dimen/abc_action_bar_content_inset_material" />
+        <TextView android:id="@+id/marca1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Marca1"
+            android:layout_gravity="center_horizontal|right"
+            android:layout_margin="@dimen/abc_action_bar_content_inset_material" />
+        <TextView android:id="@+id/ram1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ram1"
+            android:layout_gravity="center_horizontal|right"
+            android:layout_margin="@dimen/abc_action_bar_content_inset_material" />
+        <TextView android:id="@+id/procesador1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Procesador1"
+            android:layout_gravity="right|center_horizontal"
+            android:layout_margin="@dimen/abc_action_bar_content_inset_material" />
+        <TextView android:id="@+id/so1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S.O.1"
+            android:layout_gravity="right|center_horizontal"
+            android:layout_margin="@dimen/abc_action_bar_content_inset_material" />
+        <TextView android:id="@+id/hdd1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HDD1"
+            android:layout_gravity="right|center_horizontal"
+            android:layout_margin="@dimen/abc_action_bar_content_inset_material" />
+        <TextView android:id="@+id/pantalla1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pantalla1"
+            android:layout_gravity="right|center_horizontal"
+            android:layout_margin="@dimen/abc_action_bar_content_inset_material" />
+        <TextView android:id="@+id/grafica1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="T. Gráfica1"
+            android:layout_gravity="right|center_horizontal"
+            android:layout_margin="@dimen/abc_action_bar_content_inset_material" />
+        <TextView android:id="@+id/conexiones1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Conexiones1"
+            android:layout_gravity="right|center_horizontal"
+            android:layout_margin="@dimen/abc_action_bar_content_inset_material" />
+
+    </LinearLayout>
+</LinearLayout>
