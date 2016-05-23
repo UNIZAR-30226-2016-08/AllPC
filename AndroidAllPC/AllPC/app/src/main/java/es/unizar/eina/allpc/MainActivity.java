@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_CREATE=1;
     private static final int ACTIVITY_EDIT=2;
     private static final int ACTIVITY_COMPARADOR=3;
+    private static final int ACTIVITY_VIEW=4;
 
     private static final int MENU_LOGIN = Menu.FIRST;
     private static final int MENU_COMPARADOR = Menu.FIRST + 1;
@@ -198,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case SHOW_ID:
+                info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                verPC(info.id);
                 return true;
 
             case ADD_ID:
@@ -230,6 +233,19 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, PCedit.class);
         i.putExtra("_id", id);
         startActivityForResult(i, ACTIVITY_EDIT);
+    }
+
+    /**
+     * Metodo verPC
+     *
+     * Recibe el id del PC que se desea visualizar
+     *
+     * @param id
+     */
+    private void verPC(long id){
+        Intent i = new Intent(this, PcView.class);
+        i.putExtra("_id", id);
+        startActivityForResult(i, ACTIVITY_VIEW);
     }
 
     /**
