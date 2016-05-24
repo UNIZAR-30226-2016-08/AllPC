@@ -23,7 +23,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".PcComparator" />
-        <activity android:name=".PCedit" />
+        <activity android:name=".PCedit"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".PcView"></activity>
     </application>
 
