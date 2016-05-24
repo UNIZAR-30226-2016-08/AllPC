@@ -140,6 +140,7 @@ public class EspressoAllPC_AllTest
 
         onView(isRoot()).perform(pressBack());
 
+
         /*-----------AÑADIR AL COMPARADOR----------*/
         // Busca y añade al comparador un pc
         onView(withText(TEST_PC_MODELO_MOD)).perform(longClick());
