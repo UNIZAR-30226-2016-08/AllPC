@@ -27,11 +27,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int MENU_COMPARADOR = Menu.FIRST + 1;
     private static final int MENU_CREAR_PC = Menu.FIRST + 2;
     private static final int MENU_CERRAR_SESION = Menu.FIRST + 3;
+    private static final int MENU_ORDEN_ASC = Menu.FIRST + 4;
+    private static final int MENU_ORDEN_DESC = Menu.FIRST + 5;
 
-    private static final int SHOW_ID = Menu.FIRST + 4;
-    private static final int DELETE_ID = Menu.FIRST + 5;
-    private static final int EDIT_ID = Menu.FIRST + 6;
-    private static final int ADD_ID = Menu.FIRST + 7;
+    private static final int SHOW_ID = Menu.FIRST + 6;
+    private static final int DELETE_ID = Menu.FIRST + 7;
+    private static final int EDIT_ID = Menu.FIRST + 8;
+    private static final int ADD_ID = Menu.FIRST + 9;
 
 
     private boolean mLoginAdmin;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private long mid1 = 0;
     private long mid2 = 0;
 
+    private int orden = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         mLista = (ListView)findViewById(R.id.mi_lista);
-        fillData();
+        fillData(orden);
 
         mBd = new ConexionBD();
         registerForContextMenu(mLista);
@@ -63,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
      * Recupera de la base de datos todos los PC y los mete en una lista
      *
      */
-    private void fillData(){
-        Cursor mCursorPCs = mBd.getPCs();
+    private void fillData(int orden){
+        Cursor mCursorPCs = mBd.getPCs(orden);
         startManagingCursor(mCursorPCs);
 
         String[] from = new String[] { "modelo",
@@ -89,13 +92,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
         if(mLoginAdmin){
-            menu.add(Menu.NONE, MENU_CREAR_PC, Menu.NONE, "Crear PC");
-            menu.add(Menu.NONE, MENU_CERRAR_SESION, Menu.NONE, "Cerrar Sesion");
+            menu.add(Menu.NONE, MENU_CREAR_PC, Menu.NONE, R.string.menu_crearPC);
+            menu.add(Menu.NONE, MENU_CERRAR_SESION, Menu.NONE, R.string.menu_logout);
         }
         else{
-            menu.add(Menu.NONE, MENU_LOGIN, Menu.NONE, "Login");
-            menu.add(Menu.NONE, MENU_COMPARADOR, Menu.NONE, "Comparador");
+            menu.add(Menu.NONE, MENU_LOGIN, Menu.NONE, R.string.menu_login);
+            menu.add(Menu.NONE, MENU_COMPARADOR, Menu.NONE, R.string.menu_comparador);
         }
+        menu.add(Menu.NONE, MENU_ORDEN_ASC, Menu.NONE, R.string.menu_order_asc);
+        menu.add(Menu.NONE, MENU_ORDEN_DESC, Menu.NONE, R.string.menu_order_desc);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -112,12 +117,12 @@ public class MainActivity extends AppCompatActivity {
         boolean result = super.onCreateOptionsMenu(menu);
 
         if(mLoginAdmin){
-            menu.add(Menu.NONE, MENU_CREAR_PC, Menu.NONE, "Crear PC");
-            menu.add(Menu.NONE, MENU_CERRAR_SESION, Menu.NONE, "Cerrar Sesion");
+            menu.add(Menu.NONE, MENU_CREAR_PC, Menu.NONE, R.string.menu_crearPC);
+            menu.add(Menu.NONE, MENU_CERRAR_SESION, Menu.NONE, R.string.menu_logout);
         }
         else{
-            menu.add(Menu.NONE, MENU_LOGIN, Menu.NONE, "Login");
-            menu.add(Menu.NONE, MENU_COMPARADOR, Menu.NONE, "Comparador");
+            menu.add(Menu.NONE, MENU_LOGIN, Menu.NONE, R.string.menu_login);
+            menu.add(Menu.NONE, MENU_COMPARADOR, Menu.NONE, R.string.menu_comparador);
         }
 
         return result;
@@ -146,6 +151,14 @@ public class MainActivity extends AppCompatActivity {
             case MENU_CERRAR_SESION:
                 cerrarSesion();
                 return true;
+            case MENU_ORDEN_ASC:
+                orden=0;
+                fillData(orden);
+                return true;
+            case MENU_ORDEN_DESC:
+                orden=1;
+                fillData(orden);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -164,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(Menu.NONE, SHOW_ID, Menu.NONE, "Ver PC");
+        menu.add(Menu.NONE, SHOW_ID, Menu.NONE, R.string.menu_ver);
         if(mLoginAdmin) {
-            menu.add(Menu.NONE, DELETE_ID, Menu.NONE, "Borrar PC");
-            menu.add(Menu.NONE, EDIT_ID, Menu.NONE, "Editar PC");
+            menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_borrar);
+            menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.menu_editar);
         }
         else{
-            menu.add(Menu.NONE, ADD_ID, Menu.NONE, "Añadir al comparador");
+            menu.add(Menu.NONE, ADD_ID, Menu.NONE, R.string.menu_compare);
         }
     }
 
@@ -192,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
             case DELETE_ID:
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 mBd.delete(info.id, "PCs");
-                fillData();
+                fillData(orden);
                 return true;
 
             case EDIT_ID:
@@ -332,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
             mLoginAdmin = extras.getBoolean("LOGIN_ADMIN");
         }
         else{
-            fillData();
+            fillData(orden);
         }
     }
 }

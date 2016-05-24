@@ -25,7 +25,8 @@ import org.json.JSONTokener;
 public class ConexionBD {
 
     private static final String URLGETPCS = "http://allpc.ddns.net/allpc/PCs.php?tabla=PCs";
-    private static final String URLGETADMINS = "http://allpc.ddns.net/allpc/PCs.php?tabla=Administradores";
+    private static final String URLGETPCSDESC = "http://allpc.ddns.net/allpc/PCsDesc.php?tabla=PCs";
+    private static final String URLGETADMINS = "http://allpc.ddns.net/allpc/Admins.php?tabla=Administradores";
     private static final String URLINSERTPC = "http://allpc.ddns.net/allpc/insertPC.php";
     private static final String URLINSERTADMIN = "http://allpc.ddns.net/allpc/insertAdmin.php";
     private static final String URLUPDATEPC = "http://allpc.ddns.net/allpc/updatePC.php";
@@ -33,7 +34,7 @@ public class ConexionBD {
     private static final String DevolverPC = "http://allpc.ddns.net/allpc/devolverPC.php?tabla=PCs&id=";
     private static String DevolverAdmin = "http://allpc.ddns.net/allpc/devolverAdmin.php?tabla=Administradores&id=";
 
-    public static MatrixCursor getPCs() {
+    public static MatrixCursor getPCs(int orden) {
         class GetPCsJSON extends AsyncTask<String, Void, MatrixCursor> {
             @Override
             protected MatrixCursor doInBackground(String... params) {
@@ -111,7 +112,14 @@ public class ConexionBD {
         }
 
         GetPCsJSON g = new GetPCsJSON();
-        g.execute(URLGETPCS);
+
+        if(orden==0){
+            g.execute(URLGETPCS);
+        }
+        else {
+            g.execute(URLGETPCSDESC);
+        }
+
         MatrixCursor mc = new MatrixCursor(new String[] {
                 "_id", "modelo", "marca", "ram", "procesador", "so",
                 "almacenamiento", "pantalla", "grafica", "conexiones"

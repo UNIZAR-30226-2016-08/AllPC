@@ -20,4 +20,18 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- OPCIONES MENU -->
+    <string name="menu_login">Login</string>
+    <string name="menu_comparador">Comparador</string>
+    <string name="menu_crearPC">Crear PC</string>
+    <string name="menu_logout">Cerrar Sesion</string>
+    <string name="menu_order_asc">Ordenar A-Z</string>
+    <string name="menu_order_desc">Ordenar Z-A</string>
+
+    <!-- OPCIONES MENU CONTEXTUAL -->
+    <string name="menu_ver">Ver PC</string>
+    <string name="menu_editar">Editar PC</string>
+    <string name="menu_borrar">Borrar PC</string>
+    <string name="menu_compare">Anyadir al comparador</string>
 </resources>
