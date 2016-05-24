@@ -13,19 +13,25 @@
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".PcComparator" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PcComparator"
+            android:screenOrientation="portrait"/>
         <activity android:name=".PCedit"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".PcView"></activity>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PcView"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
