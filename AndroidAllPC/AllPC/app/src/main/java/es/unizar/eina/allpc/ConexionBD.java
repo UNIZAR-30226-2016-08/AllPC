@@ -34,6 +34,14 @@ public class ConexionBD {
     private static final String DevolverPC = "http://allpc.ddns.net/allpc/devolverPC.php?tabla=PCs&id=";
     private static String DevolverAdmin = "http://allpc.ddns.net/allpc/devolverAdmin.php?tabla=Administradores&id=";
 
+    /**
+     * Metodo getPCs
+     *
+     * Metodo que devuelve un MatrixCursor con todos los PCs almacenados en la BD externa
+     *
+     * @param orden
+     * @return
+     */
     public static MatrixCursor getPCs(int orden) {
         class GetPCsJSON extends AsyncTask<String, Void, MatrixCursor> {
             @Override
@@ -138,6 +146,14 @@ public class ConexionBD {
     }
 
 
+    /**
+     * Metodo getPC
+     *
+     * Metodo que devuelve un MatrixCursor con la informacion de un PC
+     *
+     * @param id
+     * @return
+     */
     public static MatrixCursor getPC(long id) {
         class GetPCsJSON extends AsyncTask<String, Void, MatrixCursor> {
             @Override
